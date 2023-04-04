@@ -4,7 +4,6 @@ function LoginValidation (values) {
     const password_pattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9]{4,}$/
 
     // TODO implement validation from backend
-
     if(values.username === "") {
         errors.username = "Username should not be me empty"
     } else {
