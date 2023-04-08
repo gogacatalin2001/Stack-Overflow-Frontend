@@ -1,8 +1,9 @@
-import '../App.css';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './LoginValidation';
 import LoginValidation from './LoginValidation';
+import './Auth.css';
+import icon from '../assets/icon.svg';
 
 export const LoginForm = () => {
     const [values, setValues] = useState({
@@ -13,7 +14,7 @@ export const LoginForm = () => {
     const [errors, setErrors] = useState({})
 
     const handleInput = (e) => {
-        setValues(prev => ({...prev, [e.target.name]: [e.target.value]}));
+        setValues(prev => ({ ...prev, [e.target.name]: [e.target.value] }));
     }
 
     const handleSubmit = (e) => {
@@ -24,29 +25,33 @@ export const LoginForm = () => {
     }
 
     return (
-        <div className='wrapper d-flex align-items-center justify-content-center w-100'>
-            <div className='login bg-white'>
-                <h2 className='mb-3'>Login</h2>
+        <section className='auth-section'>
+            <div className='auth-container-2'>
+                <img className='login-logo' src={icon} alt='stack overflow' />
                 <form onSubmit={handleSubmit} >
-                    <div className='form-group mb-2'>
-                        <label className='form-label' htmlFor='username'><strong>Username</strong></label>
-                        <input className='form-control' type='text' id='username' name='username' required onChange={handleInput} />
+                    <label htmlFor='username'>
+                        <h4>Username</h4>
+                        <input type='text' id='username' name='username' required onChange={handleInput} />
                         <div className='invalid-feedback'>
                             {errors.username}
                         </div>
-                    </div>
-                    <div className='form-group mb-2'>
-                        <label className='form-label' htmlFor='password'><strong>Password</strong></label>
-                        <input className='form-control' type='password' id='password' name='password' required onChange={handleInput} />
+                    </label>
+
+                    <label htmlFor='password'>
+                        <h4>Password</h4>
+                        <input type='password' id='password' name='password' required onChange={handleInput} />
                         <div className='invalid-feedback'>
                             {errors.password}
                         </div>
-                    </div>
-                    <button className='btn btn-primary w-100 mt-2' type='submit'>Log In</button>
+                    </label>
+
+                    <button className='auth-btn' type='submit'>Log In</button>
                 </form>
-                <label htmlFor='register-link'>Don't have an account?</label>
-                <Link to='/signup' className='btn btn-link' type='button' id='register-link' name='register-link'>Sign up.</Link>
+                <p htmlFor='register-link'>
+                    Don't have an account?
+                    <Link className='switch-form' to='/signup' type='button' id='register-link' name='register-link'>Sign up</Link>
+                </p>
             </div>
-        </div>
+        </section>
     )
 }

@@ -1,0 +1,116 @@
+.auth-section {
+    min-height: 100vh;
+    margin: 0% auto;
+    background-color: #f1f2f3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-logo {
+    padding: 20px 30px;
+}
+
+.auth-container-1 {
+    padding: 20px;
+    margin-right: 30px;
+}
+
+.auth-container-2 {
+    min-width: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-container-2 form {
+    width: 100%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    box-shadow: 0 10px 25px rgb(0 0 0 / 5%),
+        10 20px 48px rgb(0 0 0 / 5%),
+        0 1px 4px rgb(0 0 0 / 10%);
+}
+
+.auth-container-2 form label {
+   margin: 5px;
+}
+
+
+.auth-container-2 form label input {
+    padding: 10px;
+    /* width: calc( 100% - 30px ); */
+    width: 100%;
+    border: solid 1px #0000003e;
+    font-size: 13px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+}
+
+.auth-container-2 form label:nth-child(1) h4,
+.auth-container-2 form label:nth-child(2) h4,
+.auth-container-2 form label:nth-child(3) h4,
+.auth-container-2 form label:nth-child(4) h4 {
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.auth-container-2 form label:nth-child(5) {
+    display: flex;
+}
+
+.auth-container-2 form label:nth-child(5) input {
+    width: 15%;
+    margin: 13px 0px;
+}
+
+.auth-section p {
+    margin: 10px;
+}
+
+.auth-btn {
+    margin: 12px 5px;
+    padding: 10px 5px;
+    background-color: #009dff;
+    border: #009dff;
+    color: white;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+    -webkit-transition: 0.2s;
+    -moz-transition: 0.2s;
+    -ms-transition: 0.2s;
+    -o-transition: 0.2s;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.auth-btn:hover {
+    background-color: #018ce3;
+}
+
+.switch-form {
+    background-color: transparent;
+    color: #007ac6;
+    border: none;
+    margin-left: 8px;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+}

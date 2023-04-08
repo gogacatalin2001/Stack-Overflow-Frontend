@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import SignupValidation from './SignupValidation';
+import './Auth.css';
+import './AboutAuth'
+import { AboutAuth } from './AboutAuth';
 
 export const SignupForm = () => {
     const [values, setValues] = useState({
@@ -13,7 +16,7 @@ export const SignupForm = () => {
     const [errors, setErrors] = useState({})
 
     const handleInput = (e) => {
-        setValues(prev => ({...prev, [e.target.name]: [e.target.value]}));
+        setValues(prev => ({ ...prev, [e.target.name]: [e.target.value] }));
         setErrors(SignupValidation(values));
     }
 
@@ -25,43 +28,59 @@ export const SignupForm = () => {
     }
 
     return (
-        <div className='wrapper d-flex align-items-center justify-content-center w-100'>
-            <div className='register bg-white'>
-                <h2 className='mb-3'>Join the Stack Overflow community</h2>
+        <section className='auth-section'>
+            {<AboutAuth />}
+            <div className='auth-container-2'>
                 <form onSubmit={handleSubmit} >
-                    <div className='form-group mb-2'>
-                        <label className='form-label' htmlFor='email'><strong>Email</strong></label>
-                        <input className='form-control' type='email' id='email' name='email' required onChange={handleInput} />
+                    <label htmlFor='email'>
+                        <h5>Email</h5>
+                        <input type='email' id='email' name='email' required onChange={handleInput} />
                         <div className='invalid-feedback'>
                             {errors.email}
                         </div>
-                    </div>
-                    <div className='form-group mb-2'>
-                        <label className='form-label' htmlFor='username'><strong>Username</strong></label>
-                        <input className='form-control' type='text' id='username' name='username' required onChange={handleInput} />
+                    </label>
+
+                    <label htmlFor='username'>
+                        <h5>Username</h5>
+                        <input type='text' id='username' name='username' required onChange={handleInput} />
                         <div className='invalid-feedback'>
                             {errors.username}
                         </div>
-                    </div>
-                    <div className='form-group mb-2'>
-                        <label className='form-label' htmlFor='password'><strong>Password</strong></label>
-                        <input className='form-control' type='password' id='password' name='password' required onChange={handleInput} />
+                    </label>
+
+                    <label htmlFor='password'>
+                        <h5>Password</h5>
+                        <input type='password' id='password' name='password' required onChange={handleInput} />
+                        <p style={{ fontSize: '13px', color: '#666767' }}>
+                            Passwords must contain at least eight characters,
+                            <br />
+                            including at least 1 letter and 1 number.
+                        </p>
                         <div className='invalid-feedback'>
                             {errors.password}
                         </div>
-                    </div>
-                    <div className='form-group mb-2'>
-                        <label className='form-label' htmlFor='phone'><strong>Phone Number</strong></label>
-                        <input className='form-control' type='text' id='phone' name='phone' required onChange={handleInput} />
+                    </label>
+
+                    <label htmlFor='phone'>
+                        <h5>Phone Number</h5>
+                        <input type='text' id='phone' name='phone' required onChange={handleInput} />
                         <div className='invalid-feedback'>
                             {errors.phone}
                         </div>
-                    </div>
-                    <button className='btn btn-primary w-100 mt-2' type='submit'>Sign up</button>
+                    </label>
+
+                    <label htmlFor='check'>
+                        <input type='checkbox' id='check' />
+                        <p>Register as moderator</p>
+                    </label>
+
+                    <button className='auth-btn' type='submit'>Sign up</button>
                 </form>
-                <label htmlFor='login-link'>Already have an account?</label>
-                <Link to='/login' className='btn btn-link' type='button' id='login-link' name='login-link'>Log In.</Link>
+                <p htmlFor='login-link'>
+                    Already have an account?
+                    <Link className='switch-form' type='button' to='/login' id='login-link' name='login-link'>Log in</Link>
+                </p>
             </div>
-        </div >
+        </section>
     )
 }
