@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import SignupValidation from './SignupValidation';
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+
+import SignupValidation from './SignupValidation'
+import { AboutAuth } from './AboutAuth'
 import './Auth.css';
-import './AboutAuth'
-import { AboutAuth } from './AboutAuth';
 
 export const SignupForm = () => {
     const [values, setValues] = useState({

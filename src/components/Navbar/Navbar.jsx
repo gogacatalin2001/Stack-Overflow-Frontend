@@ -1,17 +1,17 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react'
+import { Link } from 'react-router-dom'
 
-import logo from '../assets/logo.svg';
-import search from '../assets/search.svg';
-import { Avatar } from './Avatar';
-import './Navbar.css';
+import logo from '../../assets/logo.svg'
+import search from '../../assets/search.svg'
+import { Avatar } from '../Avatar/Avatar'
+import './Navbar.css'
 
 export const Navbar = () => {
 
     var User = null;
 
     return (
-        <nav>
+        <nav className='main-nav'>
             <div className='navbar'>
                 <Link to='/' className='nav-item nav-logo'>
                     <img src={logo} alt='logo' />
@@ -25,7 +25,10 @@ export const Navbar = () => {
                 </form>
                 {User === null ?
                     // <Link to='/auth/register' className='nav-item nav-links'>Sign up</Link>
-                    <Link to='/login' className='nav-item nav-links'>Log in</Link>
+                    <>
+                        <Link to='/login' className='nav-item nav-links'>Log in</Link>
+                        <Link to='/signup' className='nav-item nav-links signup-btn'>Sign up</Link>
+                    </>
                     :
                     <>
                         <Link to='/user-id=?' style={{ color: 'white', textDecoration: 'none' }}>

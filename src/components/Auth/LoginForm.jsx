@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import './LoginValidation';
-import LoginValidation from './LoginValidation';
-import './Auth.css';
-import icon from '../assets/icon.svg';
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+
+import LoginValidation from './LoginValidation'
+
+import './Auth.css'
+import icon from '../../assets/icon.svg'
 
 export const LoginForm = () => {
     const [values, setValues] = useState({

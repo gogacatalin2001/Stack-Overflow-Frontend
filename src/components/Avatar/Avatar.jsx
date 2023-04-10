@@ -1,7 +1,7 @@
 import React from 'react'
 
-export const Avatar = ({children, backgroundColor, px, py, color, borderRadius, fontSize, textAling, cursor}) => {
-    
+export const Avatar = ({ children, backgroundColor, px, py, color, borderRadius, fontSize, textAling, cursor }) => {
+
     const style = {
         backgroundColor,
         padding: `${px} ${py}`,
@@ -13,8 +13,8 @@ export const Avatar = ({children, backgroundColor, px, py, color, borderRadius, 
     }
 
     return (
-    <div style={style}>
-        { children }
-    </div>
-  )
+        <div style={style}>
+            {children}
+        </div>
+    )
 }
