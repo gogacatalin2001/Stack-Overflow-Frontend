@@ -6,9 +6,10 @@ export const QuestionList = ({ questionList }) => {
     return (
         <div>
             <>
-                {questionList.map((question) => (
-                    <Question question={question} key={question.question.id} />
-                ))
+                {
+                    questionList.map((question) => (
+                        <Question question={question} key={question.id} />
+                    ))
                 }
             </>
         </div>

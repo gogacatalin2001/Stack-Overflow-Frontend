@@ -1,20 +1,21 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+// import '../Questions/Questions.css'
 
 export const Question = ({ question }) => {
 
   return (
     <div className='display-question-container'>
       <div className='display-votes-ans'>
-        <p>{question.question.voteCount}</p>
+        <p>{question.voteCount}</p>
         <p>votes</p>
       </div>
       <div className='display-votes-ans'>
-        <p>{question.question.answers.length}</p>
+        <p>{question.answers.length}</p>
         <p>answers</p>
       </div>
       <div className='display-question-details'>
-        <Link to={`/questions?question-id=${question.question.id}`} className='question-title-link'>{question.question.title}</Link>
+        <Link to={`/questions/${question.id}`} className='question-title-link'>{question.title}</Link>
         <div className='display-tags-time'>
           <div className='display-tags'>
             {
@@ -24,7 +25,7 @@ export const Question = ({ question }) => {
             }
           </div>
           <p className='display-time'>
-            posted {question.question.creationDateTime} by {question.question.user}
+            posted {question.creationDateTime} {question.userId}
           </p>
         </div>
       </div>
