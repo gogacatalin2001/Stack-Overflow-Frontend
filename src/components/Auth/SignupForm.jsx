@@ -1,28 +1,39 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
-import SignupValidation from './SignupValidation'
+
 import { AboutAuth } from './AboutAuth'
+import SignupValidation from './SignupValidation'
+import { signUp } from '../../actions/auth'
 import './Auth.css';
 
 export const SignupForm = () => {
-    const [values, setValues] = useState({
-        email: '',
-        username: '',
-        password: '',
-        phone: ''
-    })
+
+    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [phone, setPhone] = useState('')
+    const [role, setRole] = useState('USER')
 
     const [errors, setErrors] = useState({})
 
-    const handleInput = (e) => {
-        setValues(prev => ({ ...prev, [e.target.name]: [e.target.value] }));
-        setErrors(SignupValidation(values));
+    const dispatch = useDispatch()
+    const navigate = useNavigate() 
+
+    const selectRole = (checked) => {
+        if (checked) {
+            setRole('MODERATOR')
+        } else {
+            setRole('USER')
+        }
     }
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setErrors(SignupValidation(values));
+        let values = [username, email, password, phone]
+        dispatch(signUp({ username, email, password, phone, role }, navigate))
+        // setErrors(SignupValidation(values))
         // Call API to register user with entered credentials
         // Redirect to user dashboard
     }
@@ -34,7 +45,7 @@ export const SignupForm = () => {
                 <form onSubmit={handleSubmit} >
                     <label htmlFor='email'>
                         <h5>Email</h5>
-                        <input type='email' id='email' name='email' required onChange={handleInput} />
+                        <input type='email' id='email' name='email' required onChange={(e) => setEmail(e.target.value)} />
                         <div className='invalid-feedback'>
                             {errors.email}
                         </div>
@@ -42,7 +53,7 @@ export const SignupForm = () => {
 
                     <label htmlFor='username'>
                         <h5>Username</h5>
-                        <input type='text' id='username' name='username' required onChange={handleInput} />
+                        <input type='text' id='username' name='username' required onChange={(e) => setUsername(e.target.value)} />
                         <div className='invalid-feedback'>
                             {errors.username}
                         </div>
@@ -50,7 +61,7 @@ export const SignupForm = () => {
 
                     <label htmlFor='password'>
                         <h5>Password</h5>
-                        <input type='password' id='password' name='password' required onChange={handleInput} />
+                        <input type='password' id='password' name='password' required onChange={(e) => setPassword(e.target.value)} />
                         <p style={{ fontSize: '13px', color: '#666767' }}>
                             Passwords must contain at least eight characters,
                             <br />
@@ -63,14 +74,14 @@ export const SignupForm = () => {
 
                     <label htmlFor='phone'>
                         <h5>Phone Number</h5>
-                        <input type='text' id='phone' name='phone' required onChange={handleInput} />
+                        <input type='text' id='phone' name='phone' required onChange={(e) => setPhone(e.target.value)} />
                         <div className='invalid-feedback'>
                             {errors.phone}
                         </div>
                     </label>
 
                     <label htmlFor='check'>
-                        <input type='checkbox' id='check' />
+                        <input type='checkbox' onChange={(e) => selectRole(e.target.checked)} id='check' />
                         <p>Register as moderator</p>
                     </label>
 
