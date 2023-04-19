@@ -12,63 +12,124 @@ export const QuestionDetails = () => {
 
     const { id } = useParams()
 
-
     var questions = [
         {
-            id: '1',
-            title: 'Question 1',
-            text: 'Is this the first question?',
-            imageData: null,
-            voteCount: 0,
-            userId: 1,
-            creationDateTime: 'today',
-            answers: [
-                {
-                    id: '2',
-                    text: 'This is the first answer',
-                    imageData: null,
-                    voteCount: 0,
+            question: {
+                id: 11,
+                text: "Testing",
+                imageURL: null,
+                creationDateTime: "2023-04-09T21:37:18.751787",
+                voteCount: 0,
+                user: {
                     userId: 1,
-                    creationDateTime: 'today',
+                    username: "user",
+                    email: "user@gmail.com",
+                    password: "$2a$10$brigwnefzBq5fk9RDAJWguYvxGyeJTUVOfKPjWFc4OwDuOENq6u7C",
+                    phoneNumber: "0750036695",
+                    score: 0,
+                    banned: false,
+                    role: "USER",
+                    enabled: true,
+                    authorities: [
+                        {
+                            authority: "USER"
+                        }
+                    ],
+                    credentialsNonExpired: true,
+                    accountNonExpired: true,
+                    accountNonLocked: true
+                },
+                title: "Question 1",
+                answers: [
+                    {
+                        id: 12,
+                        text: "Is it working?",
+                        imageURL: null,
+                        creationDateTime: "2023-04-09T21:37:38.079583",
+                        voteCount: 0,
+                        user: {
+                            userId: 1,
+                            username: "user",
+                            email: "user@gmail.com",
+                            password: "$2a$10$brigwnefzBq5fk9RDAJWguYvxGyeJTUVOfKPjWFc4OwDuOENq6u7C",
+                            phoneNumber: "0750036695",
+                            score: 0,
+                            banned: false,
+                            role: "USER",
+                            enabled: true,
+                            authorities: [
+                                {
+                                    authority: "USER"
+                                }
+                            ],
+                            credentialsNonExpired: true,
+                            accountNonExpired: true,
+                            accountNonLocked: true
+                        }
+                    },
+                    {
+                        id: 13,
+                        text: "I gues now it is working",
+                        imageURL: null,
+                        creationDateTime: "2023-04-09T21:39:40.960797",
+                        voteCount: 0,
+                        user: {
+                            userId: 2,
+                            username: "admin",
+                            email: "admin@gmail.com",
+                            password: "$2a$10$tDZUpHK1RQC37ZiUlJsvYeLWLcZ46UcnidxEA2k.27OeccVVoB7WW",
+                            phoneNumber: "0750036696",
+                            score: 0,
+                            banned: false,
+                            role: "MODERATOR",
+                            enabled: true,
+                            authorities: [
+                                {
+                                    "authority": "MODERATOR"
+                                }
+                            ],
+                            credentialsNonExpired: true,
+                            accountNonExpired: true,
+                            accountNonLocked: true
+                        }
+                    },
+                    {
+                        id: 14,
+                        text: "It should be better now",
+                        imageURL: null,
+                        creationDateTime: "2023-04-09T22:10:44.190344",
+                        voteCount: 0,
+                        user: {
+                            userId: 2,
+                            username: "admin",
+                            email: "admin@gmail.com",
+                            password: "$2a$10$tDZUpHK1RQC37ZiUlJsvYeLWLcZ46UcnidxEA2k.27OeccVVoB7WW",
+                            phoneNumber: "0750036696",
+                            score: 0,
+                            banned: false,
+                            role: "MODERATOR",
+                            enabled: true,
+                            authorities: [
+                                {
+                                    authority: "MODERATOR"
+                                }
+                            ],
+                            credentialsNonExpired: true,
+                            accountNonExpired: true,
+                            accountNonLocked: true
+                        }
+                    }
+                ]
+            },
+            tags: [
+                {
+                    id: 4,
+                    text: "tag2"
                 }
-            ],
-            tags: ['tag1', 'tag2']
-        },
-        {
-            id: '2',
-            title: 'Question 2',
-            text: 'Is this the first question or not?',
-            imageData: null,
-            voteCount: 0,
-            userId: 1,
-            creationDateTime: 'yesterday',
-            answers: [],
-            tags: ['tag1', 'tag3']
-        },
-
-        {
-            id: '3',
-            title: 'Question 3',
-            text: 'How do you even add security to this app?',
-            imageData: null,
-            voteCount: 0,
-            userId: 2,
-            creationDateTime: 'now',
-            answers: [],
-            tags: ['security']
-        },
-        {
-            id: '4',
-            title: 'Question 4',
-            text: 'How to detect license plates using OpenCV C++?',
-            imageData: null,
-            voteCount: 0,
-            userId: 1,
-            creationDateTime: 'now',
-            answers: [],
-            tags: ['OpenCV', 'C++']
+            ]
         }
     ]
+
 
     return (
         <div className='question-details-page'>
@@ -77,22 +138,22 @@ export const QuestionDetails = () => {
                     <h1>Loading...</h1> :
                     <>
                         {
-                            questions.filter(question => question.id === id).map(question => (
-                                <div key={question?.id}>
+                            questions.filter(wrapper => wrapper.question.id.toString() === id).map(wrapper => (
+                                <div key={wrapper.question.id}>
                                     <section className='question-details-container-1'>
-                                        <h1>{question?.title}</h1>
+                                        <h1>{wrapper.question.title}</h1>
                                         <div className='question-details-container-2'>
                                             <div className='question-votes'>
                                                 <img className='votes-icon' src={upvote} width='30' alt='upvote' />
-                                                <p>{question?.voteCount}</p>
+                                                <p>{wrapper.question.voteCount}</p>
                                                 <img className='votes-icon' src={downvote} width='30' alt='downvote' />
                                             </div>
                                             <div style={{ width: '100' }}>
-                                                <p className='question-body'>{question?.text}</p>
+                                                <p className='question-body'>{wrapper.question.text}</p>
                                                 <div className='question-details-tags'>
                                                     {
-                                                        question.tags.map((tag) => (
-                                                            <p key={tag}>{tag}</p>
+                                                        wrapper.tags.map((tag) => (
+                                                            <p key={tag.id}>{tag.text}</p>
                                                         ))
                                                     }
                                                 </div>
@@ -102,12 +163,11 @@ export const QuestionDetails = () => {
                                                         <button type='button'>Delete</button>
                                                     </div>
                                                     <div>
-                                                        <p>asked {question.creationDateTime}</p>
-                                                        <Link to={`/users/${question.userId}`} className='user-link' style={{ color: '#0086d8' }}>
-                                                            <Avatar backgroundColor='orange' px='8px' py='8px'>C{/* TODO ADD USER INITIAL */}</Avatar>
+                                                        <p>asked {wrapper.question.creationDateTime}</p>
+                                                        <Link to={`/users/${wrapper.question.user.userId}`} className='user-link' style={{ color: '#0086d8' }}>
+                                                            <Avatar backgroundColor='orange' px='8px' py='8px'>{wrapper.question.user.username.charAt(0).toUpperCase()}</Avatar>
                                                             <div>
-                                                                Catalin
-                                                                {/* {question.userId} */}
+                                                                {wrapper.question.user.username}
                                                             </div>
                                                         </Link>
                                                     </div>
@@ -116,10 +176,10 @@ export const QuestionDetails = () => {
                                         </div>
                                     </section>
                                     {
-                                        question.answers.length !== 0 && (
+                                        wrapper.question.answers.length !== 0 && (
                                             <section>
-                                                <h3>{question.answers.length} answers</h3>
-                                                <DisplayAnswers key={question.id} question={question} />
+                                                <h3>{wrapper.question.answers.length} answers</h3>
+                                                <DisplayAnswers key={wrapper.question.id} question={wrapper.question} />
                                             </section>
                                         )
                                     }
@@ -132,8 +192,8 @@ export const QuestionDetails = () => {
                                         <p>
                                             Browse other questions tagged
                                             {
-                                                question.tags.map((tag) => (
-                                                    <Link to='/tags' key={tag} className='ans-tags'> {tag} </Link>
+                                                wrapper.tags.map((tag) => (
+                                                    <Link to='/tags' key={tag.id} className='ans-tags'> {tag.text} </Link>
                                                 ))
                                             }
                                             or

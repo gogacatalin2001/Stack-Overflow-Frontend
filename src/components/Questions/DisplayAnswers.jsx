@@ -18,11 +18,10 @@ export const DisplayAnswers = ({ question }) => {
                             </div>
                             <div>
                                 <p>answered {answer.creationDateTime}</p>
-                                <Link to={`/users/${answer.userId}`} className='user-link' style={{ color: '#0086d8' }}>
-                                    <Avatar backgroundColor='green' px='8px' py='8px'>C{/* TODO ADD USER INITIAL */}</Avatar>
+                                <Link to={`/users/${answer.user.userId}`} className='user-link' style={{ color: '#0086d8' }}>
+                                    <Avatar backgroundColor='green' px='8px' py='8px'>{answer.user.username.charAt(0).toUpperCase()}</Avatar>
                                     <div>
-                                        Catalin
-                                        {/* {answer.userId} */}
+                                        {answer.user.username}
                                     </div>
                                 </Link>
                             </div>

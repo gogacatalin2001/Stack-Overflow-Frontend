@@ -8,7 +8,7 @@ export const QuestionList = ({ questionList }) => {
             <>
                 {
                     questionList.map((question) => (
-                        <Question question={question} key={question.id} />
+                        <Question key={question.id} question={question} />
                     ))
                 }
             </>

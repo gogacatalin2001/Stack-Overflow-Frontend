@@ -1,6 +1,5 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-// import '../Questions/Questions.css'
 
 export const Question = ({ question }) => {
 
@@ -20,12 +19,12 @@ export const Question = ({ question }) => {
           <div className='display-tags'>
             {
               question.tags.map((tag) => (
-                <p key={tag}>{tag}</p>
+                <p key={tag.id}>{tag.text}</p>
               ))
             }
           </div>
           <p className='display-time'>
-            posted {question.creationDateTime} {question.userId}
+            posted {question.creationDateTime} {question.user.username}
           </p>
         </div>
       </div>

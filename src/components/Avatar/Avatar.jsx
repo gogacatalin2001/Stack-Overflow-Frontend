@@ -6,7 +6,7 @@ export const Avatar = ({ children, backgroundColor, px, py, color, borderRadius,
         backgroundColor,
         padding: `${px} ${py}`,
         color: color || 'black',
-        borderRadius,
+        borderRadius: '4px',
         fontSize,
         textAling: 'center',
         cursor: cursor || null
