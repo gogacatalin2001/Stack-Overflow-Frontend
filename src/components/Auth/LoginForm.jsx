@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import LoginValidation from './LoginValidation'
-import { logIn } from '../../actions/auth'
+import { logIn } from '../../actions/authActions'
 
 import './Auth.css'
 import icon from '../../assets/icon.svg'

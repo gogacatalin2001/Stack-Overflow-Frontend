@@ -1,30 +1,30 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export const Question = ({ question }) => {
+export const Question = ({ wrapper }) => {
 
   return (
     <div className='display-question-container'>
       <div className='display-votes-ans'>
-        <p>{question.voteCount}</p>
+        <p>{wrapper.question.voteCount}</p>
         <p>votes</p>
       </div>
       <div className='display-votes-ans'>
-        <p>{question.answers.length}</p>
+        <p>{wrapper.question.answers.length}</p>
         <p>answers</p>
       </div>
       <div className='display-question-details'>
-        <Link to={`/questions/${question.id}`} className='question-title-link'>{question.title}</Link>
+        <Link to={`/questions/${wrapper.question.id}`} className='question-title-link'>{wrapper.question.title}</Link>
         <div className='display-tags-time'>
           <div className='display-tags'>
             {
-              question.tags.map((tag) => (
+              wrapper.tags.map((tag) => (
                 <p key={tag.id}>{tag.text}</p>
               ))
             }
           </div>
           <p className='display-time'>
-            posted {question.creationDateTime} {question.user.username}
+            posted {wrapper.question.creationDateTime} {wrapper.question.user.username}
           </p>
         </div>
       </div>

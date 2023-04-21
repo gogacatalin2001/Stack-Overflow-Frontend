@@ -1,10 +1,12 @@
 import { combineReducers } from "redux";
 import { authReducer } from "./authReducer";
-import { currentUserReducer } from "./currentUserReducer";
-import { askQuestion } from "../actions/askQuestion";
+import questionReducer from './questionReducer'
+import { userReducer } from "./userReducer";
 
 export default combineReducers({
   authReducer,
-  currentUserReducer,
-  askQuestion
+  userReducer,
+  questionReducer
 });
+
+// TODO add all reducers here

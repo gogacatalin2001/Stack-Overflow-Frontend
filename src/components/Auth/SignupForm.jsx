@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux'
 
 import { AboutAuth } from './AboutAuth'
 import SignupValidation from './SignupValidation'
-import { signUp } from '../../actions/auth'
+import { signUp } from '../../actions/authActions'
 import './Auth.css';
 
 export const SignupForm = () => {
@@ -31,8 +31,8 @@ export const SignupForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // let values = [username, email, password, phone]
-        // setErrors(SignupValidation(values))
+        let values = [username, email, password, phone]
+        setErrors(SignupValidation(values))
         dispatch(signUp({ username, email, password, phone, role }, navigate))
         // Call API to register user with entered credentials
         // Redirect to user dashboard

@@ -11,6 +11,7 @@ import { DisplayQuestion } from "./components/Questions/DisplayQuestion";
 import "./App.css";
 
 function App() {
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -19,7 +20,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="login" element={<LoginForm />} />
           <Route path="signup" element={<SignupForm />} />
-          <Route path="questions" element={<Questions />} />
+          <Route path="questions" element={<Questions />}></Route>
           <Route path="questions/:id" element={<DisplayQuestion />} />
           <Route path="questions/ask-question" element={<AskQuestion />} />
         </Routes>

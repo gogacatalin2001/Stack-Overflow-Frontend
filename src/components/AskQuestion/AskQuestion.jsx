@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import jwtDecode from 'jwt-decode'
 
-import { askQuestion } from '../../actions/askQuestion'
+import { setCurrentUser } from '../../actions/userActions'
+import { askQuestion } from '../../actions/questionActions'
 import './AskQuestion.css'
 
 export const AskQuestion = () => {
@@ -10,23 +12,28 @@ export const AskQuestion = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const User = useSelector((state) => state.currentUserReducer)
+    const User = useSelector(state => state.currentUserReducer)
+    
+    useEffect(() => {
+        dispatch(setCurrentUser(jwtDecode(localStorage.getItem('User'))))
+    }, [dispatch])
 
     const [questionTitle, setQuestionTitle] = useState('')
     const [questionBody, setQuestionBody] = useState('')
-    const [questionTags, setQuestionTags] = useState('')
+    const [questionTags, setQuestionTags] = useState([''])
 
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        let questionTag = {
-            question: {
-              title: questionTitle,
-              text: questionBody
-            },
-            tags: questionTags
-          }
-        dispatch(askQuestion({ data: questionTag, userId: User?.userId }, navigate))
+        if (User !== null) {
+            dispatch(askQuestion({
+                question: { title: questionTitle, text: questionBody },
+                tags: questionTags,
+                userId: User.userId
+            }, navigate))
+        } else {
+            navigate('/auth/login')
+        }
     }
 
     const handleEnter = (e) => {

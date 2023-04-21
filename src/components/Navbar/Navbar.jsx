@@ -6,19 +6,16 @@ import jwtDecode from 'jwt-decode'
 import logo from '../../assets/logo.svg'
 import search from '../../assets/search.svg'
 import { Avatar } from '../Avatar/Avatar'
-import { setCurrentUser } from '../../actions/setCurrentUser'
+import { setCurrentUser } from '../../actions/userActions'
 import './Navbar.css'
 
 export const Navbar = () => {
 
     const dispatch = useDispatch()
-    const User = useSelector((state) => (state.currentUserReducer))
-
+    const User = useSelector(state => state.currentUserReducer)
 
     useEffect(() => {
-        if (User !== null) {
-            dispatch(setCurrentUser(jwtDecode(localStorage.getItem('User'))))
-        }
+        dispatch(setCurrentUser(jwtDecode(localStorage.getItem('User'))))
     }, [dispatch])
 
     return (
@@ -47,7 +44,7 @@ export const Navbar = () => {
                                 py='7px'
                                 borderRadius='50%'
                             >
-                                {User.username}
+                                {User?.username}
                             </Avatar>
                         </Link>
                         <button className='nav-item nav-links'>Log out</button>

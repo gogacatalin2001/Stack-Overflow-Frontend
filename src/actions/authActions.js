@@ -1,10 +1,10 @@
 import * as api from "../api";
 import jwtDecode from "jwt-decode";
-import { setCurrentUser } from "./setCurrentUser";
+import { setCurrentUser } from "./userActions";
 
 export const signUp = (authData, navigate) => async (dispatch) => {
   try {
-    const { data } = await api.signUp(authData);
+    const { data }  = await api.signUp(authData);
     dispatch({ type: "AUTH", data });
     dispatch(setCurrentUser(jwtDecode(localStorage.getItem('User'))));
     navigate("/");

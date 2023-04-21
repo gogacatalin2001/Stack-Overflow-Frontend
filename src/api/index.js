@@ -1,24 +1,41 @@
 import axios from "axios";
 
-const API_NO_CREDENTIALS = axios.create({
-  baseURL: "http://localhost:8080"
-});
-
-const API_CREDENTIALS = axios.create({
+export const API = axios.create({
   baseURL: "http://localhost:8080",
-  withCredentials: true
+  headers: { "Content-Type": "application/json" },
 });
 
-export const logIn = (authData) => API_NO_CREDENTIALS.post("/auth/login", authData);
-export const signUp = (authData) => API_NO_CREDENTIALS.post("/auth/register", authData);
-export const postQuestion = (questionData) =>
-  API_CREDENTIALS.post("/questions",
-  {
-    data: questionData.data,
-    params: { user_id: questionData.userId },
+// UNAUTHENTICATED REQUESTS
+export const logIn = (authData) => API.post("/auth/login", authData);
+export const signUp = (authData) => API.post("/auth/register", authData);
+
+// AUTHENTICATED REQUESTS
+export const userToken = `Bearer ${
+  JSON.parse(localStorage.getItem("User")).token
+}`;
+
+export const getAllQuestions = () =>
+  API.get("/questions/all", {
     headers: {
-      Authorization: `Bearer ${JSON.parse(localStorage.getItem("User")).token}`,
+      Authorization: userToken,
     },
+    withCredentials: true,
   });
 
-export const postAnswer = (answerData) => API_CREDENTIALS.post("/answers", answerData);
+export const getQuestion = (questionId) =>
+  API.get(`/questions?question_id=${questionId}`, {
+    headers: {
+      Authorization: userToken,
+    },
+    withCredentials: true,
+  });
+
+export const postQuestion = (questionData) =>
+  API.post(`/questions?user_id=${questionData.userId}`, questionData, {
+    headers: {
+      Authorization: userToken,
+    },
+    withCredentials: true,
+  });
+
+export const postAnswer = (answerData) => API.post("/answers", answerData);

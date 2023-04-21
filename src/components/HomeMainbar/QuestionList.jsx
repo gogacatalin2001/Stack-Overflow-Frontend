@@ -7,8 +7,8 @@ export const QuestionList = ({ questionList }) => {
         <div>
             <>
                 {
-                    questionList.map((question) => (
-                        <Question key={question.id} question={question} />
+                    questionList.map((wrapper) => (
+                        <Question key={wrapper.question.id} wrapper={wrapper} />
                     ))
                 }
             </>

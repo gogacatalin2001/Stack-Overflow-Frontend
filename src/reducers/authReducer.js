@@ -8,3 +8,5 @@ export const authReducer = (state = { data: null }, action) => {
       return state;
   }
 };
+
+// TODO figure how to save data fetched from the backend
