@@ -12,7 +12,7 @@ export const AskQuestion = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const User = useSelector(state => state.currentUserReducer)
+    const User = useSelector(state => state.userReducer)
     
     useEffect(() => {
         dispatch(setCurrentUser(jwtDecode(localStorage.getItem('User'))))

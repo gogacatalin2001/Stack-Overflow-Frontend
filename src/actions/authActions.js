@@ -4,9 +4,10 @@ import { setCurrentUser } from "./userActions";
 
 export const signUp = (authData, navigate) => async (dispatch) => {
   try {
-    const { data }  = await api.signUp(authData);
-    dispatch({ type: "AUTH", data });
-    dispatch(setCurrentUser(jwtDecode(localStorage.getItem('User'))));
+    const data = await api.signUp(authData);
+    dispatch({ type: "AUTH", payload: data });
+    localStorage.setItem("User", JSON.stringify(data));
+    dispatch(setCurrentUser(jwtDecode(localStorage.getItem("User"))));
     navigate("/");
   } catch (error) {
     console.log(error);
@@ -16,8 +17,9 @@ export const signUp = (authData, navigate) => async (dispatch) => {
 export const logIn = (authData, navigate) => async (dispatch) => {
   try {
     const { data } = await api.logIn(authData);
-    dispatch({ type: "AUTH", data });
-    dispatch(setCurrentUser(jwtDecode(localStorage.getItem('User'))));
+    dispatch({ type: "AUTH", payload: data });
+    localStorage.setItem("User", JSON.stringify(data));
+    dispatch(setCurrentUser(jwtDecode(localStorage.getItem("User"))));
     navigate("/");
   } catch (error) {
     console.log(error);

@@ -1,12 +1,11 @@
-export const authReducer = (state = { data: null }, action) => {
+const authReducer = (state = { user: null }, action) => {
   switch (action.type) {
     case "AUTH":
-      localStorage.setItem("User", JSON.stringify({ ...action?.data }));
-      return { ...state, data: action?.data };
+      return action.payload;
       
     default:
       return state;
   }
 };
 
-// TODO figure how to save data fetched from the backend
+export default authReducer

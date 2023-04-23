@@ -1,8 +1,8 @@
 import * as api from "../api";
 
-export const getAllQuestions = () => async (dispatch) => {
+export const getAllQuestions = (userToken) => async (dispatch) => {
   try {
-    const { data } = await api.getAllQuestions();
+    const { data } = await api.getAllQuestions(userToken);
     dispatch({ type: "GET_ALL_QUESTIONS", payload: data });
     localStorage.setItem("Questions", JSON.stringify(data))
   } catch (error) {
@@ -10,20 +10,9 @@ export const getAllQuestions = () => async (dispatch) => {
   }
 };
 
-export const getQuestion = (questionId, navigate) => async (dispatch) => {
+export const askQuestion = (questionData, userToken, navigate) => async (dispatch) => {
   try {
-    const { data } = await api.getQuestion(questionId);
-    dispatch({ type: "GET_QUESTION", payload: data });
-    localStorage.setItem("Question", JSON.stringify(data))
-    navigate(`/questions/${questionId}`);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-export const askQuestion = (questionData, navigate) => async (dispatch) => {
-  try {
-    const { data } = await api.postQuestion(questionData);
+    const { data } = await api.postQuestion(questionData, userToken);
     dispatch({ type: "POST_QUESTION", payload: data });
     dispatch(getAllQuestions())
     navigate("/");
@@ -31,3 +20,15 @@ export const askQuestion = (questionData, navigate) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const deleteQuestion = (questionId, userToken, navigate) => async (dispatch) => {
+  try {
+    await api.deleteQuestion(questionId, userToken);
+    dispatch({ type: "DELETE_QUESTION", payload: null });
+    dispatch(getAllQuestions())
+    navigate("/questions");
+  } catch (error) {
+    console.log(error);
+  }
+};
+

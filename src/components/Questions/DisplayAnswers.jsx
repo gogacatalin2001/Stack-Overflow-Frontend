@@ -1,10 +1,23 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import { Avatar } from '../Avatar/Avatar'
 import './Questions.css'
+import { deleteAnswer } from '../../actions/answerActions'
 
 export const DisplayAnswers = ({ question }) => {
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    var user = useSelector(state => state.userReducer).user
+    const userToken = `Bearer ${JSON.parse(localStorage.getItem("User")).token}`
+
+    const handleDeleteAnswer = (e, questionId, answerId) => {
+        e.preventDefault()
+        dispatch(deleteAnswer({ questionId, answerId }, userToken, navigate))
+    }
+
     return (
         <div className=''>
             {
@@ -14,7 +27,12 @@ export const DisplayAnswers = ({ question }) => {
                         <div className='question-actions-user'>
                             <div>
                                 <button type='button'>Share</button>
-                                <button type='button'>Delete</button>
+                                {
+                                    user.userId === answer.user.userId ?
+                                        <button type='button' onClick={(e) => handleDeleteAnswer(e, question.id, answer.id)}>Delete</button>
+                                        :
+                                        <></>
+                                }
                             </div>
                             <div>
                                 <p>answered {answer.creationDateTime}</p>

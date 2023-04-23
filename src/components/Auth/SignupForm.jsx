@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux'
 
 
 import { AboutAuth } from './AboutAuth'
-import SignupValidation from './SignupValidation'
 import { signUp } from '../../actions/authActions'
 import './Auth.css';
 
@@ -13,10 +12,9 @@ export const SignupForm = () => {
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [phone, setPhone] = useState('')
+    const [phoneNumber, setPhoneNumber] = useState('')
     const [role, setRole] = useState('USER')
 
-    const [errors, setErrors] = useState({})
 
     const dispatch = useDispatch()
     const navigate = useNavigate() 
@@ -31,11 +29,7 @@ export const SignupForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        let values = [username, email, password, phone]
-        setErrors(SignupValidation(values))
-        dispatch(signUp({ username, email, password, phone, role }, navigate))
-        // Call API to register user with entered credentials
-        // Redirect to user dashboard
+        dispatch(signUp({ username, email, password, phoneNumber, role }, navigate))
     }
 
     return (
@@ -46,17 +40,11 @@ export const SignupForm = () => {
                     <label htmlFor='email'>
                         <h5>Email</h5>
                         <input type='email' id='email' name='email' required onChange={(e) => setEmail(e.target.value)} />
-                        <div className='invalid-feedback'>
-                            {errors.email}
-                        </div>
                     </label>
 
                     <label htmlFor='username'>
                         <h5>Username</h5>
                         <input type='text' id='username' name='username' required onChange={(e) => setUsername(e.target.value)} />
-                        <div className='invalid-feedback'>
-                            {errors.username}
-                        </div>
                     </label>
 
                     <label htmlFor='password'>
@@ -67,17 +55,11 @@ export const SignupForm = () => {
                             <br />
                             including at least 1 letter and 1 number.
                         </p>
-                        <div className='invalid-feedback'>
-                            {errors.password}
-                        </div>
                     </label>
 
                     <label htmlFor='phone'>
                         <h5>Phone Number</h5>
-                        <input type='text' id='phone' name='phone' required onChange={(e) => setPhone(e.target.value)} />
-                        <div className='invalid-feedback'>
-                            {errors.phone}
-                        </div>
+                        <input type='text' id='phone' name='phone' required onChange={(e) => setPhoneNumber(e.target.value)} />
                     </label>
 
                     <label htmlFor='check'>
