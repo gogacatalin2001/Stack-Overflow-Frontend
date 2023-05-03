@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
+import { logOut } from '../../actions/userActions'
 import logo from '../../assets/logo.svg'
 import search from '../../assets/search.svg'
 import { Avatar } from '../Avatar/Avatar'
@@ -11,13 +12,14 @@ import './Navbar.css'
 export const Navbar = () => {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
     var user = useSelector(state => state.userReducer).user
 
-    useEffect(() => {
-        if (user === null) {
-            navigate('/login')
-        } 
-    }, [])
+    const handleLogOut = () => {
+        dispatch(logOut())
+        navigate('/')
+    }
 
     return (
         <nav className='main-nav'>
@@ -48,7 +50,7 @@ export const Navbar = () => {
                                 {user.username.charAt(0).toUpperCase()}
                             </Avatar>
                         </Link>
-                        <button className='nav-item nav-links'>Log out</button>
+                        <button className='nav-item nav-links' onClick={handleLogOut} >Log out</button>
                     </>
                 }
             </div>

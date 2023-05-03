@@ -3,11 +3,11 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 
-import { AboutAuth } from './AboutAuth'
+import { AboutAuth } from '../../components/Auth/AboutAuth'
 import { signUp } from '../../actions/authActions'
 import './Auth.css';
 
-export const SignupForm = () => {
+export const Signup = () => {
 
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')

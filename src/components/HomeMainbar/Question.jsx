@@ -1,3 +1,4 @@
+import moment from 'moment'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
@@ -24,7 +25,7 @@ export const Question = ({ wrapper }) => {
             }
           </div>
           <p className='display-time'>
-            posted {wrapper.question.creationDateTime} {wrapper.question.user.username}
+            posted {moment(wrapper.question.creationDateTime).fromNow()} {wrapper.question.user.username}
           </p>
         </div>
       </div>

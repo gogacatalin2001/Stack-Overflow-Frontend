@@ -2,9 +2,7 @@
 import React, { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import jwtDecode from 'jwt-decode'
 
-import { setCurrentUser } from '../../actions/userActions'
 import { QuestionList } from './QuestionList'
 import { getAllQuestions } from '../../actions/questionActions'
 import './HomeMainbar.css'
@@ -16,17 +14,10 @@ export const HomeMainbar = () => {
     const dispatch = useDispatch()
 
     var user = useSelector(state => state.userReducer).user
-    var questions = useSelector(state =>  state.questionReducer)
-    const userToken = `Bearer ${JSON.parse(localStorage.getItem("User")).token}`
-    
+    var questions = useSelector(state => state.questionReducer)
+
     useEffect(() => {
-        dispatch(setCurrentUser(jwtDecode(localStorage.getItem("User"))));
-        console.log(user)
-        if (user !== null) {
-            dispatch(getAllQuestions(userToken))
-        } else {
-            navigate('/login')
-        }
+        dispatch(getAllQuestions())
     }, [])
 
     const checkUserAuth = () => {

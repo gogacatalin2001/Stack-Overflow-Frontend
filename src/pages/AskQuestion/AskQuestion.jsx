@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
 
 import { setCurrentUser } from '../../actions/userActions'
-import { askQuestion } from '../../actions/questionActions'
+import { postQuestion } from '../../actions/questionActions'
 import './AskQuestion.css'
 
 export const AskQuestion = () => {
@@ -26,7 +26,7 @@ export const AskQuestion = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         if (User !== null) {
-            dispatch(askQuestion({
+            dispatch(postQuestion({
                 question: { title: questionTitle, text: questionBody },
                 tags: questionTags,
                 userId: User.userId

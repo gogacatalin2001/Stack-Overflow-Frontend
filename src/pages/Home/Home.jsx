@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { LeftSidebar } from '../LeftSidebar/LeftSidebar'
-import { HomeMainbar } from '../HomeMainbar/HomeMainbar'
-import { RightSidebar } from '../RightSidebar/RightSidebar'
+import { LeftSidebar } from '../../components/LeftSidebar/LeftSidebar'
+import { HomeMainbar } from '../../components/HomeMainbar/HomeMainbar'
+import { RightSidebar } from '../../components/RightSidebar/RightSidebar'
 import '../../App.css'
 
 

@@ -2,7 +2,7 @@
   "short_name": "Stack Overflow",
   "icons": [
     {
-      "src": "icon.svg",
+      "src": "../assets/icon.svg",
       "type": "image/svg",
       "sizes": "768x768"
     }

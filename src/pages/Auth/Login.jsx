@@ -7,7 +7,7 @@ import { logIn } from '../../actions/authActions'
 import './Auth.css'
 import icon from '../../assets/icon.svg'
 
-export const LoginForm = () => {
+export const Login = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
