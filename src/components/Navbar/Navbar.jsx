@@ -1,24 +1,32 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { logOut } from '../../actions/userActions'
+import { logOut } from '../../actions/authActions'
 import logo from '../../assets/logo.svg'
 import search from '../../assets/search.svg'
 import { Avatar } from '../Avatar/Avatar'
 import './Navbar.css'
+import { setCurrentUser } from '../../actions/userActions'
+import jwtDecode from 'jwt-decode'
 
 export const Navbar = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    var user = useSelector(state => state.userReducer.user)
+    var token = localStorage.getItem("Token")
 
-    var user = useSelector(state => state.userReducer).user
+    useEffect(() => {
+        dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
+    }, [dispatch])
 
     const handleLogOut = () => {
         dispatch(logOut())
+        dispatch(setCurrentUser(null))
         navigate('/')
+
     }
 
     return (

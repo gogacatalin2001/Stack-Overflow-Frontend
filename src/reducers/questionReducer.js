@@ -1,7 +1,7 @@
-const questionReducer = (state = null, action) => {
+const questionReducer = (state = { questions: [] }, action) => {
   switch (action.type) {
     case "GET_ALL_QUESTIONS":
-      return action.payload;
+      return { ...state, questions: action.payload};
     case "POST_QUESTION":
       return state;
     case "UPDATE_QUESTION":

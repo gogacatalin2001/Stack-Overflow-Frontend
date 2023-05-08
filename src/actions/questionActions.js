@@ -15,7 +15,7 @@ export const postQuestion = (questionData, userToken, navigate) => async (dispat
     const { data } = await api.postQuestion(questionData, userToken);
     dispatch({ type: "POST_QUESTION", payload: data });
     dispatch(getAllQuestions())
-    navigate("/");
+    navigate(`/questions/${questionData.questionId}`);
   } catch (error) {
     console.log(error);
   }

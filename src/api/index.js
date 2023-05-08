@@ -1,7 +1,5 @@
 import axios from "axios";
 
-// TODO only let a user vote once for a question/answer
-
 export const API = axios.create({
   baseURL: "http://localhost:8080",
   headers: { "Content-Type": "application/json" },
@@ -28,20 +26,12 @@ export const updateQuestion = (questionData, userToken) => {
 };
 
 export const updateQuestionVotes = (questionData, userToken) => {
-  // questionData : {
-  //   questionId,
-  //   userId,
-  //   vote
-  // }
-
-  API.patch(`/questions/votes?question_id=${questionData.questionId}&user_id=${questionData.userId}&vote=${questionData.vote}`, {
+  API.patch(`/questions/votes?question_id=${questionData.questionId}&user_id=${questionData.userId}&vote=${questionData.vote}`, {}, {
     headers: {
       Authorization: userToken,
     },
     withCredentials: true,
   });
-
-  // if (vote === -1) => updateUserScore(userId, -1.5)
 };
 
 export const deleteQuestion = (questionId, userToken) =>
@@ -69,20 +59,16 @@ export const updateAnswer = (answerData, userToken) => {
 };
 
 export const updateAnswerVotes = (answerData, userToken) => {
-  // answerData: {
-  //   questionId,
-  //   answerId,
-  //   userId,
-  //   vote
-  // }
-  
-  // TODO implement
-
-  // if (vote === -1) => updateUserScore(userId, -1.5)
+  API.patch(`/answers/votes?question_id=${answerData.questionId}&answer_id=${answerData.answerId}&user_id=${answerData.userId}&vote=${answerData.vote}`, {}, {
+    headers: {
+      Authorization: userToken,
+    },
+    withCredentials: true,
+  });
 };
 
 export const deleteAnswer = (questionId, answerId, userToken) =>
-  API.delete(`/answers?question_id=${questionId}&answer_id=${answerId}`, {
+  API.delete(`/answers?question_id=${questionId}&answer_id=${answerId}`, {}, {
     headers: {
       Authorization: userToken,
     },

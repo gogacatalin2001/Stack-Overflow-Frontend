@@ -12,7 +12,7 @@ export const AskQuestion = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const User = useSelector(state => state.userReducer)
+    const user = useSelector(state => state.userReducer)
     
     useEffect(() => {
         dispatch(setCurrentUser(jwtDecode(localStorage.getItem('User'))))
@@ -25,11 +25,11 @@ export const AskQuestion = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        if (User !== null) {
+        if (user !== null) {
             dispatch(postQuestion({
                 question: { title: questionTitle, text: questionBody },
                 tags: questionTags,
-                userId: User.userId
+                userId: user.userId
             }, navigate))
         } else {
             navigate('/auth/login')

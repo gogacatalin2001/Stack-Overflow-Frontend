@@ -1,11 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate} from 'react-router-dom'
+import { useEffect } from 'react'
 import moment from 'moment'
-
+import jwtDecode from 'jwt-decode'
 
 import { Avatar } from '../Avatar/Avatar'
-import { deleteAnswer } from '../../actions/answerActions'
+import { deleteAnswer, updateAnswerVotes } from '../../actions/answerActions'
+import { setCurrentUser } from '../../actions/userActions'
 import upvote from '../../assets/caretup.svg'
 import downvote from '../../assets/caretdown.svg'
 import './Questions.css'
@@ -14,10 +17,22 @@ export const DisplayAnswers = ({ question, handleShare }) => {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    var userToken = localStorage.getItem("User") !== null ? `Bearer ${JSON.parse(localStorage.getItem("User")).token}` : null
-    var user = useSelector(state => state.userReducer).user
+    var user = useSelector(state => state.userReducer.user)
+    var token = localStorage.getItem("Token")
+    var userToken = `Bearer ${JSON.parse(token).token}`
 
-    // TODO add updateVoteCount for answers
+    useEffect(() => {
+        dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
+    }, [dispatch])
+
+    const handleVote = (e, questionId, answerId, vote) => {
+        e.preventDefault()
+        if (user === null) {
+            navigate('/login')
+        } else {
+            dispatch(updateAnswerVotes({ questionId, answerId, userId: user.userId, vote }, userToken, navigate))
+        }
+    }
 
     const handleDeleteAnswer = (e, questionId, answerId) => {
         e.preventDefault()
@@ -30,9 +45,9 @@ export const DisplayAnswers = ({ question, handleShare }) => {
                 question.answers.map((answer) => (
                     <div className='display-ans' key={answer.id}>
                         <div className='votes'>
-                            <img className='votes-icon' src={upvote} width='30' alt='upvote' />
+                            <img className='votes-icon' onClick={(e) => handleVote(e, question.id, answer.id, "1")} src={upvote} width='30' alt='upvote' />
                             <p>{answer.voteCount}</p>
-                            <img className='votes-icon' src={downvote} width='30' alt='downvote' />
+                            <img className='votes-icon' onClick={(e) => handleVote(e, question.id, answer.id, "-1")} src={downvote} width='30' alt='downvote' />
                         </div>
                         <div style={{width: '100%', padding: '15px 5px'}}>
                             <p>{answer.text}</p>

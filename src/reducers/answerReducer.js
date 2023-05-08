@@ -2,9 +2,9 @@ const answerReducer = (state = null, action) => {
   switch (action.type) {
     case "POST_ANSWER":
       return state;
-    case "UPDSTE_ANSWER":
+    case "UPDATE_ANSWER":
       return state;
-    case "UPDSTE_ANSWER_VOTES":
+    case "UPDATE_ANSWER_VOTES":
       return state;
     case "DELETE_ANSWER":
       return state;

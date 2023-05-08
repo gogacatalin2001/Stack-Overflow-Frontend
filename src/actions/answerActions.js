@@ -33,8 +33,8 @@ export const updateAnswer =
   export const updateAnswerVotes =
   (answerData, userToken, navigate) => async (dispatch) => {
     try {
-      const { data } = await api.updateAnswerVotes(answerData, userToken);
-      dispatch({ type: "UPDATE_ANSWER_VOTES", payload: data });
+      await api.updateAnswerVotes(answerData, userToken);
+      dispatch({ type: "UPDATE_ANSWER_VOTES", payload: null });
       dispatch(getAllQuestions());
       navigate(`/questions/${answerData.questionId}`);
     } catch (error) {

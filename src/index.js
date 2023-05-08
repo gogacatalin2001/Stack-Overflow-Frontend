@@ -8,9 +8,9 @@ import Reducers from './reducers'
 import './index.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 
+const root = ReactDOM.createRoot(document.getElementById('root'));
 const store = createStore(Reducers, compose(applyMiddleware(thunk)))
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
     <React.StrictMode>

@@ -5,16 +5,18 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment/moment'
 import copy from 'copy-to-clipboard'
+import jwtDecode from 'jwt-decode'
 
 import { Avatar } from '../Avatar/Avatar'
 import { DisplayAnswers } from './DisplayAnswers'
-import { deleteQuestion, getAllQuestions, updateQuestion } from '../../actions/questionActions'
+import { deleteQuestion, getAllQuestions } from '../../actions/questionActions'
 import { postAnswer } from '../../actions/answerActions'
+import { updateQuestionVotes } from '../../actions/questionActions'
 
 import upvote from '../../assets/caretup.svg'
 import downvote from '../../assets/caretdown.svg'
 import './Questions.css'
-import { updateQuestionVotes } from '../../actions/questionActions'
+import { setCurrentUser } from '../../actions/userActions'
 
 
 export const QuestionDetails = () => {
@@ -27,15 +29,25 @@ export const QuestionDetails = () => {
     const baseURL = 'http://localhost:3000'
     const [answerText, setAnswerText] = useState('')
 
-    var userToken = localStorage.getItem("User") !== null ? `Bearer ${JSON.parse(localStorage.getItem("User")).token}` : null
+    var questions = useSelector(state => state.questionReducer.questions)
+    var user = useSelector(state => state.userReducer.user)
+    var token = localStorage.getItem("Token")
+    var userToken = `Bearer ${JSON.parse(token).token}`
 
-    var user = useSelector(state => state.userReducer).user
-    var questions = useSelector(state => state.questionReducer)
+    useEffect(() => {
+        dispatch(getAllQuestions())
+    }, [])
 
-    // TODO add updateVoteCount for questions
+    useEffect(() => {
+        dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
+    }, [dispatch])
+
+    const handleUpdateQuestion = () => {
+        // TODO implement
+    }
 
     const handlePostAnswer = (e, questionId) => {
-        e.preventDefault()
+        e.preventDefault()   
         if (user === null) {
             navigate('/login')
         } else {
@@ -54,21 +66,16 @@ export const QuestionDetails = () => {
         } else {
             dispatch(deleteQuestion(questionId, userToken, navigate))
         }
-
     }
 
-    const handleUpVote = (e, questionId) => {
+    const handleVote = (e, questionId, vote) => {
+        console.log(user)
         e.preventDefault()
         if (user === null) {
             navigate('/login')
         } else {
-            dispatch(updateQuestionVotes({ questionId, userId: user.userId, vote: "1" }, userToken, navigate))
+            dispatch(updateQuestionVotes({ questionId, userId: user.userId, vote }, userToken, navigate))
         }
-    }
-
-    const handleDownVote = () => {
-
-
     }
 
     const handleShare = () => {
@@ -76,10 +83,6 @@ export const QuestionDetails = () => {
         console.log(baseURL + location.pathname)
         alert('Copied to clipboard')
     }
-
-    useEffect(() => {
-        dispatch(getAllQuestions())
-    }, [])
 
     return (
         <div className='question-details-page'>
@@ -94,9 +97,9 @@ export const QuestionDetails = () => {
                                         <h1>{wrapper.question.title}</h1>
                                         <div className='question-details-container-2'>
                                             <div className='votes'>
-                                                <img src={upvote} onClick={(e) => handleUpVote(e, wrapper.question.id)} className='votes-icon' width='30' alt='upvote' />
+                                                <img src={upvote} onClick={(e) => handleVote(e, wrapper.question.id, "1")} className='votes-icon' width='30' alt='upvote' />
                                                 <p>{wrapper.question.voteCount}</p>
-                                                <img src={downvote} onClick={handleDownVote} className='votes-icon' width='30' alt='downvote' />
+                                                <img src={downvote} onClick={(e) => handleVote(e, wrapper.question.id, "-1")} className='votes-icon' width='30' alt='downvote' />
                                             </div>
                                             <div style={{ width: '100%' }}>
                                                 <p className='question-body'>{wrapper.question.text}</p>
