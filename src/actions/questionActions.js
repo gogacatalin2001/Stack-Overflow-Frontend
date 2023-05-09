@@ -15,7 +15,7 @@ export const postQuestion = (questionData, userToken, navigate) => async (dispat
     const { data } = await api.postQuestion(questionData, userToken);
     dispatch({ type: "POST_QUESTION", payload: data });
     dispatch(getAllQuestions())
-    navigate(`/questions/${questionData.questionId}`);
+    navigate(`/questions/${data.question.id}`);
   } catch (error) {
     console.log(error);
   }
@@ -26,7 +26,7 @@ export const updateQuestion = (questionData, userToken, navigate) => async (disp
     const { data } = await api.updateQuestion(questionData, userToken);
     dispatch({ type: "UPDATE_QUESTION", payload: data });
     dispatch(getAllQuestions())
-    navigate(`/questions/${questionData.questionId}`);
+    navigate(`/questions/${questionData.question.id}`);
   } catch (error) {
     console.log(error);
   }
@@ -34,10 +34,11 @@ export const updateQuestion = (questionData, userToken, navigate) => async (disp
 
 export const updateQuestionVotes = (questionData, userToken, navigate) => async (dispatch) => {
   try {
-    await api.updateQuestionVotes(questionData, userToken);
-    dispatch({ type: "UPDATE_QUESTION_VOTES", payload: null});
+    const { data } = await api.updateQuestionVotes(questionData, userToken);
+    console.log(data)
+    dispatch({ type: "UPDATE_QUESTION_VOTES", payload: data});
     dispatch(getAllQuestions())
-    navigate(`/questions/${questionData.questionId}`);
+    navigate(`/questions/${questionData.question.id}`);
   } catch (error) {
     console.log(error);
   }

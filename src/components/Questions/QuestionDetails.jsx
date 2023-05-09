@@ -12,17 +12,16 @@ import { DisplayAnswers } from './DisplayAnswers'
 import { deleteQuestion, getAllQuestions } from '../../actions/questionActions'
 import { postAnswer } from '../../actions/answerActions'
 import { updateQuestionVotes } from '../../actions/questionActions'
+import { setCurrentUser } from '../../actions/userActions'
 
 import upvote from '../../assets/caretup.svg'
 import downvote from '../../assets/caretdown.svg'
 import './Questions.css'
-import { setCurrentUser } from '../../actions/userActions'
 
 
 export const QuestionDetails = () => {
 
     const { id } = useParams()
-
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const location = useLocation()
@@ -42,12 +41,16 @@ export const QuestionDetails = () => {
         dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
     }, [dispatch])
 
-    const handleUpdateQuestion = () => {
-        // TODO implement
+    const handleUpdateQuestion = (questionId) => {
+        if (user === null) {
+            navigate('/login')
+        } else {
+            navigate(`/questions/edit-question/${questionId}`)
+        }
     }
 
     const handlePostAnswer = (e, questionId) => {
-        e.preventDefault()   
+        e.preventDefault()
         if (user === null) {
             navigate('/login')
         } else {
@@ -69,7 +72,6 @@ export const QuestionDetails = () => {
     }
 
     const handleVote = (e, questionId, vote) => {
-        console.log(user)
         e.preventDefault()
         if (user === null) {
             navigate('/login')
@@ -116,6 +118,7 @@ export const QuestionDetails = () => {
                                                         {
                                                             user !== null && user?.userId === wrapper.question.user.userId ?
                                                                 <>
+                                                                    <button type='button' onClick={(e) => handleUpdateQuestion(wrapper.question.id)}>Edit</button>
                                                                     <button type='button' onClick={(e) => handleDeleteQuestion(e, wrapper.question.id)}>Delete</button>
                                                                 </>
                                                                 :

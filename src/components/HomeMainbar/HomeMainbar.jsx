@@ -28,7 +28,7 @@ export const HomeMainbar = () => {
     }, [dispatch])
 
 
-    const checkUserAuth = () => {
+    const askQuestion = () => {
         if (user === null) {
             navigate('/login')
         } else {
@@ -43,7 +43,7 @@ export const HomeMainbar = () => {
                     location.pathname === '/' ?
                         <h1>Top Questions</h1> : <h1>All Questions</h1>
                 }
-                <button onClick={checkUserAuth} className='ask-btn'>Ask Question</button>
+                <button onClick={askQuestion} className='ask-btn'>Ask Question</button>
             </div>
             <div>
                 {

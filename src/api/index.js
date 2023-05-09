@@ -22,17 +22,29 @@ export const postQuestion = (questionData, userToken) =>
   });
 
 export const updateQuestion = (questionData, userToken) => {
-  // TODO implement
+  API.put(
+    `/questions?question_id=${questionData.question.id}&&user_id=${questionData.userId}`,
+    { question: questionData.question, tags: questionData.tags },
+    {
+      headers: {
+        Authorization: userToken,
+      },
+      withCredentials: true,
+    }
+  );
 };
 
-export const updateQuestionVotes = (questionData, userToken) => {
-  API.patch(`/questions/votes?question_id=${questionData.questionId}&user_id=${questionData.userId}&vote=${questionData.vote}`, {}, {
-    headers: {
-      Authorization: userToken,
-    },
-    withCredentials: true,
-  });
-};
+export const updateQuestionVotes = (questionData, userToken) =>
+  API.patch(
+    `/questions/votes?question_id=${questionData.questionId}&user_id=${questionData.userId}&vote=${questionData.vote}`,
+    {},
+    {
+      headers: {
+        Authorization: userToken,
+      },
+      withCredentials: true,
+    }
+  );
 
 export const deleteQuestion = (questionId, userToken) =>
   API.delete(`/questions?question_id=${questionId}`, {
@@ -58,19 +70,26 @@ export const updateAnswer = (answerData, userToken) => {
   // TODO implement
 };
 
-export const updateAnswerVotes = (answerData, userToken) => {
-  API.patch(`/answers/votes?question_id=${answerData.questionId}&answer_id=${answerData.answerId}&user_id=${answerData.userId}&vote=${answerData.vote}`, {}, {
-    headers: {
-      Authorization: userToken,
-    },
-    withCredentials: true,
-  });
-};
+export const updateAnswerVotes = (answerData, userToken) =>
+  API.patch(
+    `/answers/votes?question_id=${answerData.questionId}&answer_id=${answerData.answerId}&user_id=${answerData.userId}&vote=${answerData.vote}`,
+    {},
+    {
+      headers: {
+        Authorization: userToken,
+      },
+      withCredentials: true,
+    }
+  );
 
 export const deleteAnswer = (questionId, answerId, userToken) =>
-  API.delete(`/answers?question_id=${questionId}&answer_id=${answerId}`, {}, {
-    headers: {
-      Authorization: userToken,
-    },
-    withCredentials: true,
-  });
+  API.delete(
+    `/answers?question_id=${questionId}&answer_id=${answerId}`,
+    {},
+    {
+      headers: {
+        Authorization: userToken,
+      },
+      withCredentials: true,
+    }
+  );

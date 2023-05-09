@@ -28,6 +28,6 @@ export const logIn = (authData, navigate) => async (dispatch) => {
 export const logOut = () => async (dispatch) => {
   dispatch({
     type: "LOGOUT",
-    payload: {token: null},
+    payload: null,
   });
 };

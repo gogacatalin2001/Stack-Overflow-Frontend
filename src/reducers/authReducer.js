@@ -4,7 +4,7 @@ const authReducer = (state = { token: null }, action) => {
       localStorage.setItem("Token", JSON.stringify(action.payload));
       return { ...state, token: action.payload }
     case "LOGOUT":
-      localStorage.setItem("Token", JSON.stringify(action.payload));
+      localStorage.removeItem("Token")
       return { ...state, token: action.payload }
     default:
       return state;

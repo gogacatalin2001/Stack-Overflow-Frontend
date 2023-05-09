@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -12,25 +13,29 @@ export const AskQuestion = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const user = useSelector(state => state.userReducer)
-    
+    var user = useSelector(state => state.userReducer.user)
+    var token = localStorage.getItem("Token")
+    var userToken = `Bearer ${JSON.parse(token).token}`
+
     useEffect(() => {
-        dispatch(setCurrentUser(jwtDecode(localStorage.getItem('User'))))
+        dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
     }, [dispatch])
 
     const [questionTitle, setQuestionTitle] = useState('')
     const [questionBody, setQuestionBody] = useState('')
     const [questionTags, setQuestionTags] = useState([''])
 
-
     const handleSubmit = (e) => {
         e.preventDefault()
         if (user !== null) {
-            dispatch(postQuestion({
-                question: { title: questionTitle, text: questionBody },
-                tags: questionTags,
-                userId: user.userId
-            }, navigate))
+            dispatch(postQuestion(
+                {
+                    question: { title: questionTitle, text: questionBody },
+                    tags: questionTags,
+                    userId: user.userId
+                },
+                userToken,
+                navigate))
         } else {
             navigate('/auth/login')
         }
