@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import moment from 'moment'
 import jwtDecode from 'jwt-decode'
@@ -13,7 +13,7 @@ import upvote from '../../assets/caretup.svg'
 import downvote from '../../assets/caretdown.svg'
 import './Questions.css'
 
-export const DisplayAnswers = ({ question, handleShare }) => {
+export const DisplayAnswers = ({ question, handleUpdateAnswer, handleShare }) => {
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -25,18 +25,22 @@ export const DisplayAnswers = ({ question, handleShare }) => {
         dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
     }, [dispatch])
 
-    const handleVote = (e, questionId, answerId, vote) => {
+    const handleVote = (e, answerId, vote) => {
         e.preventDefault()
         if (user === null) {
             navigate('/login')
         } else {
-            dispatch(updateAnswerVotes({ questionId, answerId, userId: user.userId, vote }, userToken, navigate))
+            dispatch(updateAnswerVotes({ questionId: question.id, answerId, userId: user.userId, vote }, userToken, navigate))
         }
     }
 
-    const handleDeleteAnswer = (e, questionId, answerId) => {
+    const handleDeleteAnswer = (e, answerId) => {
         e.preventDefault()
-        dispatch(deleteAnswer({ questionId, answerId }, userToken, navigate))
+        if (user === null) {
+            navigate('/login')
+        } else {
+            dispatch(deleteAnswer({ questionId: question.id, answerId }, userToken, navigate))
+        }
     }
 
     return (
@@ -45,11 +49,11 @@ export const DisplayAnswers = ({ question, handleShare }) => {
                 question.answers.map((answer) => (
                     <div className='display-ans' key={answer.id}>
                         <div className='votes'>
-                            <img className='votes-icon' onClick={(e) => handleVote(e, question.id, answer.id, "1")} src={upvote} width='30' alt='upvote' />
+                            <img className='votes-icon' onClick={(e) => handleVote(e, answer.id, "1")} src={upvote} width='30' alt='upvote' />
                             <p>{answer.voteCount}</p>
                             <img className='votes-icon' onClick={(e) => handleVote(e, question.id, answer.id, "-1")} src={downvote} width='30' alt='downvote' />
                         </div>
-                        <div style={{width: '100%', padding: '15px 5px'}}>
+                        <div style={{ width: '100%', padding: '15px 5px' }}>
                             <p>{answer.text}</p>
                             <div className='question-actions-user'>
                                 <div>
@@ -57,7 +61,8 @@ export const DisplayAnswers = ({ question, handleShare }) => {
                                     {
                                         user !== null && user.userId === answer.user.userId ?
                                             <>
-                                                <button type='button' onClick={(e) => handleDeleteAnswer(e, question.id, answer.id)}>Delete</button>
+                                                <button type='button' onClick={(e) => handleUpdateAnswer(answer)}>Edit</button>
+                                                <button type='button' onClick={(e) => handleDeleteAnswer(e, answer.id)}>Delete</button>
                                             </>
                                             :
                                             <></>

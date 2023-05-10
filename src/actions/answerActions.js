@@ -4,12 +4,7 @@ import { getAllQuestions } from "./questionActions";
 export const postAnswer =
   (answerData, userToken, navigate) => async (dispatch) => {
     try {
-      const { data } = await api.postAnswer(
-        answerData.questionId,
-        answerData.userId,
-        answerData.answerText,
-        userToken
-      );
+      const { data } = await api.postAnswer(answerData, userToken);
       dispatch({ type: "POST_ANSWER", payload: data });
       dispatch(getAllQuestions());
       navigate(`/questions/${answerData.questionId}`);
@@ -21,8 +16,8 @@ export const postAnswer =
 export const updateAnswer =
   (answerData, userToken, navigate) => async (dispatch) => {
     try {
-      const { data } = await api.updateAnswer(answerData, userToken);
-      dispatch({ type: "UPDATE_ANSWER", payload: data });
+      await api.updateAnswer(answerData, userToken);
+      dispatch({ type: "UPDATE_ANSWER", payload: null });
       dispatch(getAllQuestions());
       navigate(`/questions/${answerData.questionId}`);
     } catch (error) {
@@ -30,7 +25,7 @@ export const updateAnswer =
     }
   };
 
-  export const updateAnswerVotes =
+export const updateAnswerVotes =
   (answerData, userToken, navigate) => async (dispatch) => {
     try {
       await api.updateAnswerVotes(answerData, userToken);
@@ -45,11 +40,7 @@ export const updateAnswer =
 export const deleteAnswer =
   (answerData, userToken, navigate) => async (dispatch) => {
     try {
-      await api.deleteAnswer(
-        answerData.questionId,
-        answerData.answerId,
-        userToken
-      );
+      await api.deleteAnswer(answerData, userToken);
       dispatch({ type: "DELETE_ANSWER", payload: null });
       dispatch(getAllQuestions());
       navigate(`/questions/${answerData.questionId}`);

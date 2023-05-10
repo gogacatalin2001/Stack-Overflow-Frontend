@@ -5,7 +5,7 @@ const questionReducer = (state = { questions: [] }, action) => {
     case "POST_QUESTION":
       return state;
     case "UPDATE_QUESTION":
-        return state;
+      return { ...state, questions: action.payload};
     case "UPDATE_QUESTION_VOTES":
       return state;
     case "DELETE_QUESTION":

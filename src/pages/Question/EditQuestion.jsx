@@ -24,15 +24,22 @@ export const EditQuestion = () => {
 
     const [questionTitle, setQuestionTitle] = useState('')
     const [questionBody, setQuestionBody] = useState('')
-    const [questionTags, setQuestionTags] = useState('')
-
-    // document.getElementById('ask-ques-title').value = question?.title
+    const [questionTags, setQuestionTags] = useState([])
 
     useEffect(() => {
         dispatch(getAllQuestions())
         document.getElementById('ask-ques-title').value = question?.title
         document.getElementById('ask-ques-body').value = question?.text
         document.getElementById('ask-ques-tags').value = tags?.map(tag => tag.text)
+        if (question?.title !== null) {
+            setQuestionTitle(question.title) 
+        }
+        if (question?.text !== null) {
+            setQuestionBody(question.text) 
+        }
+        if (tags !== null) {
+            setQuestionTags(tags) 
+        }
     }, [])
     
     useEffect(() => {
@@ -42,15 +49,13 @@ export const EditQuestion = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         if (user !== null) {
-            question.user = null
             question.title = questionTitle
             question.text = questionBody
             tags = questionTags
             dispatch(updateQuestion(
                 {
                     question,
-                    tags,
-                    userId: user.userId
+                    tags
                 },
                 userToken,
                 navigate

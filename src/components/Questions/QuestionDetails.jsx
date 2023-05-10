@@ -10,7 +10,7 @@ import jwtDecode from 'jwt-decode'
 import { Avatar } from '../Avatar/Avatar'
 import { DisplayAnswers } from './DisplayAnswers'
 import { deleteQuestion, getAllQuestions } from '../../actions/questionActions'
-import { postAnswer } from '../../actions/answerActions'
+import { postAnswer, updateAnswer } from '../../actions/answerActions'
 import { updateQuestionVotes } from '../../actions/questionActions'
 import { setCurrentUser } from '../../actions/userActions'
 
@@ -27,11 +27,13 @@ export const QuestionDetails = () => {
     const location = useLocation()
     const baseURL = 'http://localhost:3000'
     const [answerText, setAnswerText] = useState('')
+    const [answerToUpdate, setAnswerToUpdate] = useState(null)
 
     var questions = useSelector(state => state.questionReducer.questions)
     var user = useSelector(state => state.userReducer.user)
     var token = localStorage.getItem("Token")
     var userToken = `Bearer ${JSON.parse(token).token}`
+    // TODO fix error after question update- it works only after page refresh
 
     useEffect(() => {
         dispatch(getAllQuestions())
@@ -41,7 +43,8 @@ export const QuestionDetails = () => {
         dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
     }, [dispatch])
 
-    const handleUpdateQuestion = (questionId) => {
+    const handleUpdateQuestion = (e, questionId) => {
+        e.preventDefault()
         if (user === null) {
             navigate('/login')
         } else {
@@ -57,9 +60,23 @@ export const QuestionDetails = () => {
             if (answerText === '') {
                 alert("Your answer cannot be empty")
             } else {
-                dispatch(postAnswer({ questionId, userId: user.userId, answerText }, userToken, navigate))
+                if (answerToUpdate !== null) {
+                    answerToUpdate.text = answerText
+                    console.log(answerToUpdate)
+                    dispatch(updateAnswer({answer: answerToUpdate, questionId, userId: user.userId}, userToken, navigate))
+                    window.location.reload(false)
+                } else {
+                    setAnswerToUpdate(null)
+                    dispatch(postAnswer({ questionId, userId: user.userId, answerText }, userToken, navigate))
+                    window.location.reload(false)
+                }
             }
         }
+    }
+
+    const handleUpdateAnswer = (answer) => {
+        setAnswerToUpdate(answer)
+        document.getElementById('answer-body').value = answer.text
     }
 
     const handleDeleteQuestion = (e, questionId) => {
@@ -82,14 +99,13 @@ export const QuestionDetails = () => {
 
     const handleShare = () => {
         copy(baseURL + location.pathname)
-        console.log(baseURL + location.pathname)
         alert('Copied to clipboard')
     }
 
     return (
         <div className='question-details-page'>
             {
-                questions === null ?
+                 questions === null ?
                     <h1>Loading...</h1> :
                     <>
                         {
@@ -118,7 +134,7 @@ export const QuestionDetails = () => {
                                                         {
                                                             user !== null && user?.userId === wrapper.question.user.userId ?
                                                                 <>
-                                                                    <button type='button' onClick={(e) => handleUpdateQuestion(wrapper.question.id)}>Edit</button>
+                                                                    <button type='button' onClick={(e) => handleUpdateQuestion(e, wrapper.question.id)}>Edit</button>
                                                                     <button type='button' onClick={(e) => handleDeleteQuestion(e, wrapper.question.id)}>Delete</button>
                                                                 </>
                                                                 :
@@ -145,14 +161,14 @@ export const QuestionDetails = () => {
                                         wrapper.question.answers.length !== 0 && (
                                             <section>
                                                 <h3>{wrapper.question.answers.length} answers</h3>
-                                                <DisplayAnswers key={wrapper.question.id} question={wrapper.question} handleShare={handleShare} />
+                                                <DisplayAnswers key={wrapper.question.id} question={wrapper.question} handleShare={handleShare} handleUpdateAnswer={handleUpdateAnswer} />
                                             </section>
                                         )
                                     }
                                     <section className='post-ans-container'>
                                         <h3>Your answer</h3>
                                         <form onSubmit={(e) => handlePostAnswer(e, wrapper.question.id)} >
-                                            <textarea name='' id='' cols='30' rows='10' placeholder='Enter your answer here' onChange={(e) => setAnswerText(e.target.value)} ></textarea><br />
+                                            <textarea id='answer-body' cols='30' rows='10' placeholder='Enter your answer here' onChange={(e) => setAnswerText(e.target.value)} ></textarea><br />
                                             <input className='post-ans-btn' type='submit' value='Post Your Answer' />
                                         </form>
                                         <p>

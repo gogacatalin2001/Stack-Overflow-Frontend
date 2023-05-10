@@ -23,7 +23,7 @@ export const postQuestion = (questionData, userToken) =>
 
 export const updateQuestion = (questionData, userToken) => {
   API.put(
-    `/questions?question_id=${questionData.question.id}&&user_id=${questionData.userId}`,
+    `/questions?question_id=${questionData.question.id}&user_id=${questionData.question.user.userId}`,
     { question: questionData.question, tags: questionData.tags },
     {
       headers: {
@@ -54,10 +54,10 @@ export const deleteQuestion = (questionId, userToken) =>
     withCredentials: true,
   });
 
-export const postAnswer = (questionId, userId, answerText, userToken) =>
+export const postAnswer = (answerData, userToken) =>
   API.post(
-    `/answers?question_id=${questionId}&user_id=${userId}`,
-    { text: answerText },
+    `/answers?question_id=${answerData.questionId}&user_id=${answerData.userId}`,
+    { text: answerData.answerText },
     {
       headers: {
         Authorization: userToken,
@@ -67,7 +67,16 @@ export const postAnswer = (questionId, userId, answerText, userToken) =>
   );
 
 export const updateAnswer = (answerData, userToken) => {
-  // TODO implement
+  API.put(
+    `/answers?question_id=${answerData.questionId}&answer_id=${answerData.answer.id}&user_id=${answerData.userId}`,
+    answerData.answer,
+    {
+      headers: {
+        Authorization: userToken,
+      },
+      withCredentials: true,
+    }
+  );
 };
 
 export const updateAnswerVotes = (answerData, userToken) =>
@@ -82,10 +91,9 @@ export const updateAnswerVotes = (answerData, userToken) =>
     }
   );
 
-export const deleteAnswer = (questionId, answerId, userToken) =>
+export const deleteAnswer = (answerData, userToken) =>
   API.delete(
-    `/answers?question_id=${questionId}&answer_id=${answerId}`,
-    {},
+    `/answers?question_id=${answerData.questionId}&answer_id=${answerData.answerId}`,
     {
       headers: {
         Authorization: userToken,
