@@ -12,6 +12,12 @@ export const getAllQuestions = () => async (dispatch) => {
 
 export const postQuestion = (questionData, userToken, navigate) => async (dispatch) => {
   try {
+    // TODO save the image then set the qustionId
+    console.log(questionData)
+    // const { image } = api.postImage(questionData.image, userToken)
+    // questionData.imageId = image.id
+    // console.log(image)
+    questionData.questionData = "-1"
     const { data } = await api.postQuestion(questionData, userToken);
     dispatch({ type: "POST_QUESTION", payload: data });
     dispatch(getAllQuestions())
@@ -23,6 +29,8 @@ export const postQuestion = (questionData, userToken, navigate) => async (dispat
 
 export const updateQuestion = (questionData, userToken, navigate) => async (dispatch) => {
   try {
+    // TODO save the image then set the qustionId
+    questionData.questionData = "-1"
     const data = await api.updateQuestion(questionData, userToken);
     dispatch({ type: "UPDATE_QUESTION", payload: data });
     dispatch(getAllQuestions())

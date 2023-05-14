@@ -4,10 +4,3 @@ export const setCurrentUser = (data) => {
     payload: data,
   };
 };
-
-export const updateUser = (data) => {
-  return {
-    type: "UPDATE_USER",
-    payload: data,
-  };
-}

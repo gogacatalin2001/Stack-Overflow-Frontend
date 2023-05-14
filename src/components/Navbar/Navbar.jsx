@@ -19,6 +19,11 @@ export const Navbar = () => {
     var token = localStorage.getItem("Token")
 
     useEffect(() => {
+        if (token) {
+            if (jwtDecode(token).exp * 1000 < new Date().getTime()) {
+                handleLogOut()
+            }
+        }
         dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
     }, [dispatch])
 
@@ -26,7 +31,6 @@ export const Navbar = () => {
         dispatch(logOut())
         dispatch(setCurrentUser(null))
         navigate('/')
-
     }
 
     return (

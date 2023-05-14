@@ -4,6 +4,8 @@ import { getAllQuestions } from "./questionActions";
 export const postAnswer =
   (answerData, userToken, navigate) => async (dispatch) => {
     try {
+      // TODO post the image then set the image id in answerData 
+      answerData.imageId = "-1"
       const { data } = await api.postAnswer(answerData, userToken);
       dispatch({ type: "POST_ANSWER", payload: data });
       dispatch(getAllQuestions());
@@ -16,6 +18,8 @@ export const postAnswer =
 export const updateAnswer =
   (answerData, userToken, navigate) => async (dispatch) => {
     try {
+      // TODO post the image then set the image id in answerData 
+      answerData.imageId = "-1"
       await api.updateAnswer(answerData, userToken);
       dispatch({ type: "UPDATE_ANSWER", payload: null });
       dispatch(getAllQuestions());

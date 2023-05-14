@@ -15,7 +15,7 @@ export const AskQuestion = () => {
 
     var user = useSelector(state => state.userReducer.user)
     var token = localStorage.getItem("Token")
-    var userToken = `Bearer ${JSON.parse(token).token}`
+    var userToken = token ? `Bearer ${JSON.parse(token).token}` : null
 
     useEffect(() => {
         dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
@@ -24,6 +24,8 @@ export const AskQuestion = () => {
     const [questionTitle, setQuestionTitle] = useState('')
     const [questionBody, setQuestionBody] = useState('')
     const [questionTags, setQuestionTags] = useState([''])
+    const [questionImage, setQuestionImage] = useState(null)
+    const [imagePreview, setImagePreview] = useState(null)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -32,6 +34,7 @@ export const AskQuestion = () => {
                 {
                     question: { title: questionTitle, text: questionBody },
                     tags: questionTags,
+                    image: questionImage,
                     userId: user.userId
                 },
                 userToken,
@@ -39,6 +42,13 @@ export const AskQuestion = () => {
         } else {
             navigate('/auth/login')
         }
+    }
+
+    const handleUploadImage = (file) => {
+        setImagePreview(URL.createObjectURL(file))
+        let imageData = new FormData();
+        imageData.append("image", file)
+        setQuestionImage(imageData)
     }
 
     const handleEnter = (e) => {
@@ -68,6 +78,10 @@ export const AskQuestion = () => {
                             <p>Add up to 5 tags to describe what your question is about. Start typing to se suggestions.</p>
                             <input type='text' id='ask-ques-tags' placeholder='e.g. (excel iphone flutter)' onChange={(e) => setQuestionTags(e.target.value.split(' '))} />
                         </label>
+                        <div>
+                            <input id='upload-image' name='image' type='file' accept='image/*' onChange={(e) => handleUploadImage(e.target.files[0])} />
+                            {imagePreview && <img alt='preview' src={imagePreview} />}
+                        </div>
                     </div>
                     <input className='review-btn' type='submit' value='Review your question' />
                 </form>

@@ -19,8 +19,8 @@ export const EditQuestion = () => {
     var question = wrapper[0]?.question
     var tags = wrapper[0]?.tags
     var user = useSelector(state => state.userReducer.user)
-    const token = localStorage.getItem("Token")
-    const userToken = `Bearer ${JSON.parse(token).token}`
+    var token = localStorage.getItem("Token")
+    var userToken = token ? `Bearer ${JSON.parse(token).token}` : null
 
     const [questionTitle, setQuestionTitle] = useState('')
     const [questionBody, setQuestionBody] = useState('')
@@ -51,6 +51,7 @@ export const EditQuestion = () => {
         if (user !== null) {
             question.title = questionTitle
             question.text = questionBody
+            // TODO set question image
             tags = questionTags
             dispatch(updateQuestion(
                 {
@@ -92,6 +93,7 @@ export const EditQuestion = () => {
                             <p>Add up to 5 tags to describe what your question is about. Start typing to se suggestions.</p>
                             <input type='text' id='ask-ques-tags' placeholder='e.g. (excel iphone flutter)' onChange={(e) => setQuestionTags(e.target.value.split(' '))} />
                         </label>
+                        <input id='upload-image' name ='image' type='file' />
                     </div>
                     <input className='review-btn' type='submit' value='Review your question' />
                 </form>

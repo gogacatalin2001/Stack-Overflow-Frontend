@@ -19,7 +19,7 @@ export const DisplayAnswers = ({ question, handleUpdateAnswer, handleShare }) =>
     const navigate = useNavigate()
     var user = useSelector(state => state.userReducer.user)
     var token = localStorage.getItem("Token")
-    var userToken = `Bearer ${JSON.parse(token).token}`
+    var userToken = token ? `Bearer ${JSON.parse(token).token}` : null
 
     useEffect(() => {
         dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
@@ -39,7 +39,7 @@ export const DisplayAnswers = ({ question, handleUpdateAnswer, handleShare }) =>
         if (user === null) {
             navigate('/login')
         } else {
-            dispatch(deleteAnswer({ questionId: question.id, answerId }, userToken, navigate))
+            dispatch(deleteAnswer({ questionId: question.id, answerId, userId: user.userId }, userToken, navigate))
         }
     }
 
@@ -55,6 +55,12 @@ export const DisplayAnswers = ({ question, handleUpdateAnswer, handleShare }) =>
                         </div>
                         <div style={{ width: '100%', padding: '15px 5px' }}>
                             <p>{answer.text}</p>
+                            {
+                                answer.imageURL ?
+                                    <img id='thumbnail' alt='Answer image' src={answer.imageURL} />
+                                    :
+                                    <></>
+                            }
                             <div className='question-actions-user'>
                                 <div>
                                     <button type='button' onClick={handleShare} >Share</button>

@@ -2,7 +2,6 @@ import axios from "axios";
 
 export const API = axios.create({
   baseURL: "http://localhost:8080",
-  headers: { "Content-Type": "application/json" },
 });
 
 // UNAUTHENTICATED REQUESTS
@@ -10,6 +9,16 @@ export const logIn = (authData) => API.post("/auth/login", authData);
 export const signUp = (authData) => API.post("/auth/register", authData);
 
 // AUTHENTICATED REQUESTS
+
+// TODO implemnt save image
+export const postImage = (imageData, userToken) =>
+  API.post(`/images?image=${imageData}`, {
+    headers: {
+      Authorization: userToken,
+      "content-type": "multipart/form-data",
+    },
+    withCredentials: true,
+  });
 
 export const getAllQuestions = () => API.get("/questions/all");
 
@@ -21,9 +30,9 @@ export const postQuestion = (questionData, userToken) =>
     withCredentials: true,
   });
 
-export const updateQuestion = (questionData, userToken) => {
+export const updateQuestion = (questionData, userToken) =>
   API.put(
-    `/questions?question_id=${questionData.question.id}&user_id=${questionData.question.user.userId}`,
+    `/questions?question_id=${questionData.question.id}&image_id=${questionData.imageId}&user_id=${questionData.question.user.userId}`,
     { question: questionData.question, tags: questionData.tags },
     {
       headers: {
@@ -32,7 +41,6 @@ export const updateQuestion = (questionData, userToken) => {
       withCredentials: true,
     }
   );
-};
 
 export const updateQuestionVotes = (questionData, userToken) =>
   API.patch(
@@ -56,7 +64,7 @@ export const deleteQuestion = (questionId, userToken) =>
 
 export const postAnswer = (answerData, userToken) =>
   API.post(
-    `/answers?question_id=${answerData.questionId}&user_id=${answerData.userId}`,
+    `/answers?question_id=${answerData.questionId}&image_id=${answerData.imageId}&user_id=${answerData.userId}`,
     { text: answerData.answerText },
     {
       headers: {
@@ -68,7 +76,7 @@ export const postAnswer = (answerData, userToken) =>
 
 export const updateAnswer = (answerData, userToken) => {
   API.put(
-    `/answers?question_id=${answerData.questionId}&answer_id=${answerData.answer.id}&user_id=${answerData.userId}`,
+    `/answers?question_id=${answerData.questionId}&answer_id=${answerData.answer.id}&image_id=${answerData.imageId}&user_id=${answerData.userId}`,
     answerData.answer,
     {
       headers: {
@@ -93,7 +101,7 @@ export const updateAnswerVotes = (answerData, userToken) =>
 
 export const deleteAnswer = (answerData, userToken) =>
   API.delete(
-    `/answers?question_id=${answerData.questionId}&answer_id=${answerData.answerId}`,
+    `/answers?question_id=${answerData.questionId}&answer_id=${answerData.answerId}&user_id=${answerData.useId}`,
     {
       headers: {
         Authorization: userToken,
@@ -101,3 +109,5 @@ export const deleteAnswer = (answerData, userToken) =>
       withCredentials: true,
     }
   );
+
+export const getAllTags = () => API.get("/tags/all");

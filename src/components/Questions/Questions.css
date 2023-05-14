@@ -1,7 +1,6 @@
 .question-details-page {
     width: calc(100% - 300px - 24px);
     float: left;
-    margin: 80px 0px;
     padding: 0px;
 }
 

@@ -10,9 +10,10 @@ import { AskQuestion } from "./pages/Question/AskQuestion";
 import { EditQuestion } from "./pages/Question/EditQuestion";
 import { DisplayQuestion } from "./components/Questions/DisplayQuestion";
 import "./App.css";
+import { Tags } from "./pages/Tags/Tags";
+import { Users } from "./pages/Users/Users";
 
 function App() {
-
   return (
     <div className="App">
       <BrowserRouter>
@@ -24,8 +25,12 @@ function App() {
           <Route path="questions" element={<Questions />} />
           <Route path="questions/:id" element={<DisplayQuestion />} />
           <Route path="questions/ask-question" element={<AskQuestion />} />
-          <Route path="questions/edit-question/:id" element={<EditQuestion />} />
-          {/* TODO add Tags and Users components */}
+          <Route
+            path="questions/edit-question/:id"
+            element={<EditQuestion />}
+          />
+          <Route path="tags" element={<Tags />} />
+          <Route path="users" element={<Users />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -28,12 +28,13 @@ export const QuestionDetails = () => {
     const baseURL = 'http://localhost:3000'
     const [answerText, setAnswerText] = useState('')
     const [answerToUpdate, setAnswerToUpdate] = useState(null)
+    const [answerImage, setAnswerImage] = useState(null)
+    const [imagePreview, setImagePreview] = useState(null)
 
     var questions = useSelector(state => state.questionReducer.questions)
     var user = useSelector(state => state.userReducer.user)
     var token = localStorage.getItem("Token")
-    var userToken = `Bearer ${JSON.parse(token).token}`
-    // TODO fix error after question update- it works only after page refresh
+    var userToken = token ? `Bearer ${JSON.parse(token).token}` : null
 
     useEffect(() => {
         dispatch(getAllQuestions())
@@ -52,22 +53,28 @@ export const QuestionDetails = () => {
         }
     }
 
+    const handleUploadImage = (file) => {
+        setImagePreview(URL.createObjectURL(file))
+        let imageData = new FormData();
+        imageData.append("image", file)
+        setAnswerImage(imageData)
+    }
+
     const handlePostAnswer = (e, questionId) => {
         e.preventDefault()
         if (user === null) {
             navigate('/login')
         } else {
             if (answerText === '') {
-                alert("Your answer cannot be empty")
+                document.getElementById('answer-body').placeholder = "Your answer cannot be empty"
             } else {
                 if (answerToUpdate !== null) {
                     answerToUpdate.text = answerText
-                    console.log(answerToUpdate)
-                    dispatch(updateAnswer({answer: answerToUpdate, questionId, userId: user.userId}, userToken, navigate))
+                    dispatch(updateAnswer({ answer: answerToUpdate, image: answerImage, questionId, userId: user.userId }, userToken, navigate))
                     window.location.reload(false)
                 } else {
                     setAnswerToUpdate(null)
-                    dispatch(postAnswer({ questionId, userId: user.userId, answerText }, userToken, navigate))
+                    dispatch(postAnswer({ questionId, image: answerImage, userId: user.userId, answerText }, userToken, navigate))
                     window.location.reload(false)
                 }
             }
@@ -105,7 +112,7 @@ export const QuestionDetails = () => {
     return (
         <div className='question-details-page'>
             {
-                 questions === null ?
+                questions === null ?
                     <h1>Loading...</h1> :
                     <>
                         {
@@ -121,6 +128,13 @@ export const QuestionDetails = () => {
                                             </div>
                                             <div style={{ width: '100%' }}>
                                                 <p className='question-body'>{wrapper.question.text}</p>
+                                                {
+                                                    wrapper.question.imageURL ?
+                                                    // TODO add question image
+                                                        <img id='thumbnail' alt='Question image' src={wrapper.question.imageURL} />
+                                                        :
+                                                        <></>
+                                                }
                                                 <div className='question-details-tags'>
                                                     {
                                                         wrapper.tags.map((tag) => (
@@ -169,7 +183,12 @@ export const QuestionDetails = () => {
                                         <h3>Your answer</h3>
                                         <form onSubmit={(e) => handlePostAnswer(e, wrapper.question.id)} >
                                             <textarea id='answer-body' cols='30' rows='10' placeholder='Enter your answer here' onChange={(e) => setAnswerText(e.target.value)} ></textarea><br />
-                                            <input className='post-ans-btn' type='submit' value='Post Your Answer' />
+                                            <div>
+                                                <input id='upload-image' name='image' type='file' onChange={(e) => handleUploadImage(e.target.files[0])} />
+                                                {imagePreview && <img alt='preview' src={imagePreview} />}
+                                                <br />
+                                                <input className='post-ans-btn' type='submit' value='Post Your Answer' />
+                                            </div>
                                         </form>
                                         <p>
                                             Browse other questions tagged
