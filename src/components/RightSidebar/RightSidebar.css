@@ -53,7 +53,7 @@
     display: flex;
     flex-flow: row wrap;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: space-between;
     border: solid 1px #e3e6e8;
     padding: 10px;
 }
@@ -63,6 +63,7 @@
     background-color: #e1ecf4;
     color: #39739d;
     font-size: 13px;
+    line-height: 22px;
     border-radius: 2px;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;

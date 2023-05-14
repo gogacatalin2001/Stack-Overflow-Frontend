@@ -9,9 +9,11 @@ import { Questions } from "./pages/Questions/Questions";
 import { AskQuestion } from "./pages/Question/AskQuestion";
 import { EditQuestion } from "./pages/Question/EditQuestion";
 import { DisplayQuestion } from "./components/Questions/DisplayQuestion";
-import "./App.css";
 import { Tags } from "./pages/Tags/Tags";
 import { Users } from "./pages/Users/Users";
+import { UserProfile } from "./components/Users/UserProfile";
+import "./App.css";
+import { BannedUser } from "./pages/Auth/BannedUser";
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
           />
           <Route path="tags" element={<Tags />} />
           <Route path="users" element={<Users />} />
+          <Route path="users/:id" element={<UserProfile />} />
+          <Route path="banned" element={<BannedUser />} />
         </Routes>
       </BrowserRouter>
     </div>

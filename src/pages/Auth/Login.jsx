@@ -8,11 +8,11 @@ import './Auth.css'
 import icon from '../../assets/icon.svg'
 
 export const Login = () => {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
 
     const handleSubmit = (e) => {
         e.preventDefault();

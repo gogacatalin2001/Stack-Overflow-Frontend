@@ -101,7 +101,7 @@ export const updateAnswerVotes = (answerData, userToken) =>
 
 export const deleteAnswer = (answerData, userToken) =>
   API.delete(
-    `/answers?question_id=${answerData.questionId}&answer_id=${answerData.answerId}&user_id=${answerData.useId}`,
+    `/answers?question_id=${answerData.questionId}&answer_id=${answerData.answerId}&user_id=${answerData.userId}`,
     {
       headers: {
         Authorization: userToken,
@@ -111,3 +111,17 @@ export const deleteAnswer = (answerData, userToken) =>
   );
 
 export const getAllTags = () => API.get("/tags/all");
+
+export const getAllUsers = () => API.get("/users/all");
+
+export const updateUser = (userData, userToken) =>
+  API.put(
+    `/users?user_id=${userData.userId}`,
+    userData,
+    {
+      headers: {
+        Authorization: userToken,
+      },
+      withCredentials: true,
+    }
+  );

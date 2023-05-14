@@ -15,9 +15,9 @@ export const HomeMainbar = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    var user = useSelector(state => state.userReducer.user)
-    var questions = useSelector(state => state.questionReducer.questions)
-    var token = localStorage.getItem("Token")
+    const user = useSelector(state => state.userReducer.user)
+    const questions = useSelector(state => state.questionReducer.questions)
+    const token = localStorage.getItem("Token")
 
     useEffect(() => {
         dispatch(getAllQuestions())

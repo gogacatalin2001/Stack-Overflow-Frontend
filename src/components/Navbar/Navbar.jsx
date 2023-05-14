@@ -52,11 +52,11 @@ export const Navbar = () => {
                     </>
                     :
                     <>
-                        <Link to='/user' style={{ color: 'white', textDecoration: 'none' }}>
+                        <Link to={`/users/${user?.userId}`} style={{ color: 'white', textDecoration: 'none' }}>
                             <Avatar
                                 backgroundColor='#009dff'
                                 px='10px'
-                                py='7px'
+                                py='10px'
                                 borderRadius='50%'
                             >
                                 {user.username.charAt(0).toUpperCase()}

@@ -4,7 +4,6 @@ export const getAllQuestions = () => async (dispatch) => {
   try {
     const { data } = await api.getAllQuestions();
     dispatch({ type: "GET_ALL_QUESTIONS", payload: data });
-    localStorage.setItem("Questions", JSON.stringify(data))
   } catch (error) {
     console.log(error);
   }
