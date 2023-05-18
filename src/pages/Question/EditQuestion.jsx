@@ -15,9 +15,9 @@ export const EditQuestion = () => {
     const { id } = useParams()
 
     const questions = useSelector(state => state.questionReducer.questions)
-    const wrapper = questions.filter(wrapper => wrapper.question.id.toString() === id)
-    var question = wrapper[0]?.question
-    var tags = wrapper[0]?.tags
+    const wrapper = questions.filter(wrapper => wrapper.question.id.toString() === id)[0]
+    var question = wrapper?.question
+    var tags = wrapper?.tags
     var user = useSelector(state => state.userReducer.user)
     var token = localStorage.getItem("Token")
     var userToken = token ? `Bearer ${JSON.parse(token).token}` : null
@@ -28,6 +28,7 @@ export const EditQuestion = () => {
 
     useEffect(() => {
         dispatch(getAllQuestions())
+        console.log(wrapper)
         document.getElementById('ask-ques-title').value = question?.title
         document.getElementById('ask-ques-body').value = question?.text
         document.getElementById('ask-ques-tags').value = tags?.map(tag => tag.text)
@@ -51,7 +52,7 @@ export const EditQuestion = () => {
         if (user !== null) {
             question.title = questionTitle
             question.text = questionBody
-            // TODO set question image
+            // TODO add image
             tags = questionTags
             dispatch(updateQuestion(
                 {

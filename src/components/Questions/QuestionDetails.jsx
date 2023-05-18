@@ -9,10 +9,11 @@ import jwtDecode from 'jwt-decode'
 
 import { Avatar } from '../Avatar/Avatar'
 import { DisplayAnswers } from './DisplayAnswers'
-import { deleteQuestion, getAllQuestions } from '../../actions/questionActions'
+import { deleteQuestion, getAllQuestions, getFilteredQuestions } from '../../actions/questionActions'
 import { postAnswer, updateAnswer } from '../../actions/answerActions'
 import { updateQuestionVotes } from '../../actions/questionActions'
 import { setCurrentUser } from '../../actions/userActions'
+import { getImageData } from '../../actions/imageActions'
 
 import upvote from '../../assets/caretup.svg'
 import downvote from '../../assets/caretdown.svg'
@@ -29,20 +30,47 @@ export const QuestionDetails = () => {
     const [answerText, setAnswerText] = useState('')
     const [answerToUpdate, setAnswerToUpdate] = useState(null)
     const [answerImage, setAnswerImage] = useState(null)
-    const [imagePreview, setImagePreview] = useState(null)
+    const [answerImagePreview, setAnswerImagePreview] = useState(null)
 
-    var questions = useSelector(state => state.questionReducer.questions)
-    var user = useSelector(state => state.userReducer.user)
-    var token = localStorage.getItem("Token")
-    var userToken = token ? `Bearer ${JSON.parse(token).token}` : null
+    const [questionImage, setQuestionImage] = useState(null)
+
+    const questions = JSON.parse(localStorage.getItem("Questions"))
+    const wrapper = questions.filter(wrapper => wrapper.question.id.toString() === id)[0]
+    const question = wrapper.question
+    const tags = wrapper.tags
+    const user = useSelector(state => state.userReducer.user)
+    const token = localStorage.getItem("Token")
+    const userToken = token ? `Bearer ${JSON.parse(token).token}` : null
+
+    const image = useSelector(state => state.imageReducer.image)
+
 
     useEffect(() => {
         dispatch(getAllQuestions())
+        setQuestionImage(getImage(question.image.id, question.image.type))
     }, [])
+
+    useEffect(() => {
+        getImage(question.image.id, question.image.type)
+    }, [getAllQuestions])
 
     useEffect(() => {
         dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
     }, [dispatch])
+
+    const getImage = (imageId, imageType) => {
+        if (imageId !== null && imageType !== null) {
+            dispatch(getImageData(imageId))
+            setQuestionImage("data:" + imageType + ";base64," + image)
+        }
+    }
+
+    const handleUploadImage = (file) => {
+        setAnswerImagePreview(URL.createObjectURL(file))
+        const image = new FormData()
+        image.append("image", file)
+        setAnswerImage(image)
+    }
 
     const handleUpdateQuestion = (e, questionId) => {
         e.preventDefault()
@@ -53,11 +81,13 @@ export const QuestionDetails = () => {
         }
     }
 
-    const handleUploadImage = (file) => {
-        setImagePreview(URL.createObjectURL(file))
-        let imageData = new FormData();
-        imageData.append("image", file)
-        setAnswerImage(imageData)
+    const handleDeleteQuestion = (e, questionId) => {
+        e.preventDefault()
+        if (user === null) {
+            navigate('/login')
+        } else {
+            dispatch(deleteQuestion(questionId, userToken, navigate))
+        }
     }
 
     const handlePostAnswer = (e, questionId) => {
@@ -66,7 +96,7 @@ export const QuestionDetails = () => {
             navigate('/login')
         } else {
             if (answerText === '') {
-                document.getElementById('answer-body').placeholder = "Your answer cannot be empty"
+                document.getElementById('answer-text').placeholder = "Your answer cannot be empty"
             } else {
                 if (answerToUpdate !== null) {
                     answerToUpdate.text = answerText
@@ -83,16 +113,7 @@ export const QuestionDetails = () => {
 
     const handleUpdateAnswer = (answer) => {
         setAnswerToUpdate(answer)
-        document.getElementById('answer-body').value = answer.text
-    }
-
-    const handleDeleteQuestion = (e, questionId) => {
-        e.preventDefault()
-        if (user === null) {
-            navigate('/login')
-        } else {
-            dispatch(deleteQuestion(questionId, userToken, navigate))
-        }
+        document.getElementById('answer-text').value = answer.text
     }
 
     const handleVote = (e, questionId, vote) => {
@@ -112,98 +133,93 @@ export const QuestionDetails = () => {
     return (
         <div className='question-details-page'>
             {
-                questions === null ?
+                question === null ?
                     <h1>Loading...</h1> :
                     <>
-                        {
-                            questions.filter(wrapper => wrapper.question.id.toString() === id).map(wrapper => (
-                                <div key={wrapper.question.id}>
-                                    <section className='question-details-container-1'>
-                                        <h1>{wrapper.question.title}</h1>
-                                        <div className='question-details-container-2'>
-                                            <div className='votes'>
-                                                <img src={upvote} onClick={(e) => handleVote(e, wrapper.question.id, "1")} className='votes-icon' width='30' alt='upvote' />
-                                                <p>{wrapper.question.voteCount}</p>
-                                                <img src={downvote} onClick={(e) => handleVote(e, wrapper.question.id, "-1")} className='votes-icon' width='30' alt='downvote' />
-                                            </div>
-                                            <div style={{ width: '100%' }}>
-                                                <p className='question-body'>{wrapper.question.text}</p>
+                        <div key={question.id}>
+                            <section className='question-details-container-1'>
+                                <h1>{question.title}</h1>
+                                <div className='question-details-container-2'>
+                                    <div className='votes'>
+                                        <img src={upvote} onClick={e => handleVote(e, question.id, "1")} className='votes-icon' width='30' alt='upvote' />
+                                        <p>{question.voteCount}</p>
+                                        <img src={downvote} onClick={e => handleVote(e, question.id, "-1")} className='votes-icon' width='30' alt='downvote' />
+                                    </div>
+                                    <div style={{ width: '100%' }}>
+                                        <p className='question-body'>{question.text}</p>
+                                        {questionImage && <img src={questionImage} width='300' alt="" />}
+                                        <div className='question-details-tags'>
+                                            {
+                                                tags.map(tag =>
+                                                    <p key={tag.id}>{tag.text}</p>
+                                                )
+                                            }
+                                        </div>
+                                        <div className='question-actions-user'>
+                                            <div>
+                                                <button type='button' onClick={handleShare} >Share</button>
                                                 {
-                                                    wrapper.question.imageURL ?
-                                                    // TODO add question image
-                                                        <img id='thumbnail' alt='Question image' src={wrapper.question.imageURL} />
-                                                        :
-                                                        <></>
+                                                    user !== null && user?.userId === question.user.userId &&
+                                                    <>
+                                                        <button type='button' onClick={e => handleUpdateQuestion(e, question.id)}>Edit</button>
+                                                        <button type='button' onClick={e => handleDeleteQuestion(e, question.id)}>Delete</button>
+                                                    </>
                                                 }
-                                                <div className='question-details-tags'>
-                                                    {
-                                                        wrapper.tags.map((tag) => (
-                                                            <p key={tag.id}>{tag.text}</p>
-                                                        ))
-                                                    }
-                                                </div>
-                                                <div className='question-actions-user'>
+                                            </div>
+                                            <div className='user-details'>
+                                                <Link to={`/users/${question.user.userId}`} className='user-link' style={{ color: '#0086d8' }}>
+                                                    <Avatar backgroundColor='orange' px='8px' py='8px'>
+                                                        {question.user.username.charAt(0).toUpperCase()}
+                                                    </Avatar>
                                                     <div>
-                                                        <button type='button' onClick={handleShare} >Share</button>
-                                                        {
-                                                            user !== null && user?.userId === wrapper.question.user.userId ?
-                                                                <>
-                                                                    <button type='button' onClick={(e) => handleUpdateQuestion(e, wrapper.question.id)}>Edit</button>
-                                                                    <button type='button' onClick={(e) => handleDeleteQuestion(e, wrapper.question.id)}>Delete</button>
-                                                                </>
-                                                                :
-                                                                <></>
-                                                        }
+                                                        {question.user.username}
                                                     </div>
-                                                    <div className='user-details'>
-                                                        <Link to={`/users/${wrapper.question.user.userId}`} className='user-link' style={{ color: '#0086d8' }}>
-                                                            <Avatar backgroundColor='orange' px='8px' py='8px'>
-                                                                {wrapper.question.user.username.charAt(0).toUpperCase()}
-                                                            </Avatar>
-                                                            <div>
-                                                                {wrapper.question.user.username}
-                                                            </div>
-                                                        </Link>
-                                                        <p style={{ fontWeight: 'bold' }}>{wrapper.question.user.score}</p>
-                                                        <p>asked {moment(wrapper.question.creationDateTime).fromNow()}</p>
-                                                    </div>
-                                                </div>
+                                                </Link>
+                                                <p style={{ fontWeight: 'bold' }}>{question.user.score}</p>
+                                                <p>asked {moment(question.creationDateTime).fromNow()}</p>
                                             </div>
                                         </div>
-                                    </section>
+                                    </div>
+                                </div>
+                            </section>
+                            {
+                                question.answers.length !== 0 &&
+                                <section>
+                                    <h3>{question.answers.length} answers</h3>
+                                    {question.answers.map(answer => (
+                                        <DisplayAnswers key={answer.id} answer={answer} questionId={question.id} handleShare={handleShare} handleUpdateAnswer={handleUpdateAnswer} />
+                                    ))}
+
+                                </section>
+
+                            }
+                            <section className='post-ans-container'>
+                                <h3>Your answer</h3>
+                                <form onSubmit={e => handlePostAnswer(e, question.id)} >
+                                    <textarea id='answer-text' cols='30' rows='10' placeholder='Enter your answer here' onChange={(e) => setAnswerText(e.target.value)} />
+                                    <br />
+                                    <div>
+                                        {
+                                            answerImagePreview && <img alt='preview' src={answerImagePreview} width='350' />
+                                        }
+                                        <br />
+                                        <input type='file' id="image" onChange={e => handleUploadImage(e.target.files[0])} />
+                                        <br />
+                                        <input className='post-ans-btn' type='submit' value='Post Your Answer' />
+                                    </div>
+                                </form>
+                                <p>
+                                    Browse other questions tagged
                                     {
-                                        wrapper.question.answers.length !== 0 && (
-                                            <section>
-                                                <h3>{wrapper.question.answers.length} answers</h3>
-                                                <DisplayAnswers key={wrapper.question.id} question={wrapper.question} handleShare={handleShare} handleUpdateAnswer={handleUpdateAnswer} />
-                                            </section>
+                                        tags.map(tag =>
+                                            <Link to='/tags' key={tag.id} className='ans-tags'> {tag.text} </Link>
                                         )
                                     }
-                                    <section className='post-ans-container'>
-                                        <h3>Your answer</h3>
-                                        <form onSubmit={(e) => handlePostAnswer(e, wrapper.question.id)} >
-                                            <textarea id='answer-body' cols='30' rows='10' placeholder='Enter your answer here' onChange={(e) => setAnswerText(e.target.value)} ></textarea><br />
-                                            <div>
-                                                <input id='upload-image' name='image' type='file' onChange={(e) => handleUploadImage(e.target.files[0])} />
-                                                {imagePreview && <img alt='preview' src={imagePreview} />}
-                                                <br />
-                                                <input className='post-ans-btn' type='submit' value='Post Your Answer' />
-                                            </div>
-                                        </form>
-                                        <p>
-                                            Browse other questions tagged
-                                            {
-                                                wrapper.tags.map((tag) => (
-                                                    <Link to='/tags' key={tag.id} className='ans-tags'> {tag.text} </Link>
-                                                ))
-                                            }
-                                            or
-                                            <Link to='/questions/ask-question' style={{ textDecoration: 'none', color: '#009dff' }}> ask your own question.</Link>
-                                        </p>
-                                    </section>
-                                </div>
-                            ))
-                        }
+                                    or
+                                    <Link to='/questions/ask-question' style={{ textDecoration: 'none', color: '#009dff' }}> ask your own question.</Link>
+                                </p>
+                            </section>
+                        </div>
                     </>
             }
 

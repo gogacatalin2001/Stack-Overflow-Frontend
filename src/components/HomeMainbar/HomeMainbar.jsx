@@ -27,6 +27,9 @@ export const HomeMainbar = () => {
         dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
     }, [dispatch])
 
+    const filterQuestions = ({ title, tag }) => {
+
+    }
 
     const askQuestion = () => {
         if (user === null) {

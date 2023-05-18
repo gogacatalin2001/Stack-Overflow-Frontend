@@ -4,13 +4,15 @@ import questionReducer from './questionReducer'
 import userReducer from "./userReducer";
 import answerReducer from "./answerReducer";
 import tagReducer from "./tagReducer";
+import imageReducer from "./imageReducer";
 
 export default combineReducers({
   authReducer,
   userReducer,
   questionReducer,
   answerReducer,
-  tagReducer
+  tagReducer,
+  imageReducer
 });
 
 // TODO add all reducers here

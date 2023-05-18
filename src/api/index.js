@@ -10,29 +10,39 @@ export const signUp = (authData) => API.post("/auth/register", authData);
 
 // AUTHENTICATED REQUESTS
 
-// TODO implemnt save image
+export const getImage = (imageId) =>
+  API.get(`/images/image-data?image_id=${imageId}`, {
+    responseType: "arraybuffer",
+  });
+
 export const postImage = (imageData, userToken) =>
-  API.post(`/images?image=${imageData}`, {
+  API.post(`/images`, imageData, {
     headers: {
       Authorization: userToken,
-      "content-type": "multipart/form-data",
     },
     withCredentials: true,
   });
 
 export const getAllQuestions = () => API.get("/questions/all");
 
+export const getQuestion = (questionId) =>
+  API.get(`/questions?question_id=${questionId}`);
+
 export const postQuestion = (questionData, userToken) =>
-  API.post(`/questions?user_id=${questionData.userId}`, questionData, {
-    headers: {
-      Authorization: userToken,
-    },
-    withCredentials: true,
-  });
+  API.post(
+    `/questions?image_id=${questionData.image}&user_id=${questionData.userId}`,
+    questionData,
+    {
+      headers: {
+        Authorization: userToken,
+      },
+      withCredentials: true,
+    }
+  );
 
 export const updateQuestion = (questionData, userToken) =>
   API.put(
-    `/questions?question_id=${questionData.question.id}&image_id=${questionData.imageId}&user_id=${questionData.question.user.userId}`,
+    `/questions?question_id=${questionData.question.id}&image_id=${questionData.image}&user_id=${questionData.question.user.userId}`,
     { question: questionData.question, tags: questionData.tags },
     {
       headers: {
@@ -64,7 +74,7 @@ export const deleteQuestion = (questionId, userToken) =>
 
 export const postAnswer = (answerData, userToken) =>
   API.post(
-    `/answers?question_id=${answerData.questionId}&image_id=${answerData.imageId}&user_id=${answerData.userId}`,
+    `/answers?question_id=${answerData.questionId}&image_id=${answerData.image}&user_id=${answerData.userId}`,
     { text: answerData.answerText },
     {
       headers: {
@@ -76,7 +86,7 @@ export const postAnswer = (answerData, userToken) =>
 
 export const updateAnswer = (answerData, userToken) => {
   API.put(
-    `/answers?question_id=${answerData.questionId}&answer_id=${answerData.answer.id}&image_id=${answerData.imageId}&user_id=${answerData.userId}`,
+    `/answers?question_id=${answerData.questionId}&answer_id=${answerData.answer.id}&image_id=${answerData.image}&user_id=${answerData.userId}`,
     answerData.answer,
     {
       headers: {
@@ -115,13 +125,9 @@ export const getAllTags = () => API.get("/tags/all");
 export const getAllUsers = () => API.get("/users/all");
 
 export const updateUser = (userData, userToken) =>
-  API.put(
-    `/users?user_id=${userData.userId}`,
-    userData,
-    {
-      headers: {
-        Authorization: userToken,
-      },
-      withCredentials: true,
-    }
-  );
+  API.put(`/users?user_id=${userData.userId}`, userData, {
+    headers: {
+      Authorization: userToken,
+    },
+    withCredentials: true,
+  });

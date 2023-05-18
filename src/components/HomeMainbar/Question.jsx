@@ -19,7 +19,7 @@ export const Question = ({ wrapper }) => {
         <div className='display-tags-time'>
           <div className='display-tags'>
             {
-              wrapper.tags.map((tag) => (
+              wrapper.tags.map(tag => (
                 <p key={tag.id}>{tag.text}</p>
               ))
             }
