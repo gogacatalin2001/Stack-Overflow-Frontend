@@ -1,10 +1,32 @@
 import * as api from "../api";
+import { Buffer } from "buffer";
 
 export const getAllQuestions = () => async (dispatch) => {
   try {
     const { data } = await api.getAllQuestions();
     localStorage.setItem("Questions", JSON.stringify(data));
     dispatch({ type: "GET_ALL_QUESTIONS", payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getQuestion = (questionId) => async (dispatch) => {
+  try {
+    const data = await api.getQuestion(questionId);
+    let wrapper = data.data;
+    async function fetchImage(question) {
+      const image = await api.getImage(question.image.id);
+      let base64ImageString = Buffer.from(image.data, "binary").toString(
+        "base64"
+      );
+      return "data:" + question.image.type + ";base64," + base64ImageString;
+    }
+    if (wrapper.question.image !== null) {
+      await fetchImage(wrapper.question).then((data) => (wrapper.question.image.imageData = data));
+    }
+    localStorage.setItem("Question", JSON.stringify(wrapper))
+    dispatch({ type: "GET_QUESTION", payload: data });
   } catch (error) {
     console.log(error);
   }

@@ -26,7 +26,7 @@ export const postImage = (imageData, userToken) =>
 export const getAllQuestions = () => API.get("/questions/all");
 
 export const getQuestion = (questionId) =>
-  API.get(`/questions?question_id=${questionId}`);
+  API.get(`/questions/get?question_id=${questionId}`);
 
 export const postQuestion = (questionData, userToken) =>
   API.post(

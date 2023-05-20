@@ -9,11 +9,10 @@ import jwtDecode from 'jwt-decode'
 
 import { Avatar } from '../Avatar/Avatar'
 import { DisplayAnswers } from './DisplayAnswers'
-import { deleteQuestion, getAllQuestions, getFilteredQuestions } from '../../actions/questionActions'
+import { deleteQuestion, getQuestion } from '../../actions/questionActions'
 import { postAnswer, updateAnswer } from '../../actions/answerActions'
 import { updateQuestionVotes } from '../../actions/questionActions'
 import { setCurrentUser } from '../../actions/userActions'
-import { getImageData } from '../../actions/imageActions'
 
 import upvote from '../../assets/caretup.svg'
 import downvote from '../../assets/caretdown.svg'
@@ -31,39 +30,23 @@ export const QuestionDetails = () => {
     const [answerToUpdate, setAnswerToUpdate] = useState(null)
     const [answerImage, setAnswerImage] = useState(null)
     const [answerImagePreview, setAnswerImagePreview] = useState(null)
+    const [question, setQuestion] = useState(null)
+    const [tags, setTags] = useState([])
 
-    const [questionImage, setQuestionImage] = useState(null)
-
-    const questions = JSON.parse(localStorage.getItem("Questions"))
-    const wrapper = questions.filter(wrapper => wrapper.question.id.toString() === id)[0]
-    const question = wrapper.question
-    const tags = wrapper.tags
     const user = useSelector(state => state.userReducer.user)
     const token = localStorage.getItem("Token")
     const userToken = token ? `Bearer ${JSON.parse(token).token}` : null
 
-    const image = useSelector(state => state.imageReducer.image)
-
-
     useEffect(() => {
-        dispatch(getAllQuestions())
-        setQuestionImage(getImage(question.image.id, question.image.type))
+        dispatch(getQuestion(id))
+        const wrapper = JSON.parse(localStorage.getItem("Question"))
+        setQuestion(wrapper.question)
+        setTags(wrapper.tags)
     }, [])
-
-    useEffect(() => {
-        getImage(question.image.id, question.image.type)
-    }, [getAllQuestions])
 
     useEffect(() => {
         dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
     }, [dispatch])
-
-    const getImage = (imageId, imageType) => {
-        if (imageId !== null && imageType !== null) {
-            dispatch(getImageData(imageId))
-            setQuestionImage("data:" + imageType + ";base64," + image)
-        }
-    }
 
     const handleUploadImage = (file) => {
         setAnswerImagePreview(URL.createObjectURL(file))
@@ -147,7 +130,7 @@ export const QuestionDetails = () => {
                                     </div>
                                     <div style={{ width: '100%' }}>
                                         <p className='question-body'>{question.text}</p>
-                                        {questionImage && <img src={questionImage} width='300' alt="" />}
+                                        {question.image && <img src={question.image.imageData} width='300' alt="" />}
                                         <div className='question-details-tags'>
                                             {
                                                 tags.map(tag =>

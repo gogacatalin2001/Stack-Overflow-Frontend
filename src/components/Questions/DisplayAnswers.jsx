@@ -5,11 +5,12 @@ import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import moment from 'moment'
 import jwtDecode from 'jwt-decode'
+import { Buffer } from 'buffer'
 
+import * as api from '../../api'
 import { Avatar } from '../Avatar/Avatar'
 import { deleteAnswer, updateAnswerVotes } from '../../actions/answerActions'
 import { setCurrentUser } from '../../actions/userActions'
-import { getImageData } from '../../actions/imageActions'
 import upvote from '../../assets/caretup.svg'
 import downvote from '../../assets/caretdown.svg'
 import './Questions.css'
@@ -21,17 +22,29 @@ export const DisplayAnswers = ({ answer, questionId, handleUpdateAnswer, handleS
     const user = useSelector(state => state.userReducer.user)
     const token = localStorage.getItem("Token")
     const userToken = token ? `Bearer ${JSON.parse(token).token}` : null
-    const image = useSelector(state => state.imageReducer.image)
+
     const [answerImage, setAnswerImage] = useState(null)
 
-
     useEffect(() => {
-        getImage(answer.image.id, answer.image.type)
+        const fetchData = async () => {
+            if (answer.image !== null) {
+                dispatch(getImageData(answer.image.id, answer.image.type))
+            }
+        }
+        fetchData()
     }, [])
 
     useEffect(() => {
         dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
     }, [dispatch])
+
+    const getImageData = (imageId, imageType) => async () => {
+        if (imageId !== null && imageType !== null) {
+            const image = await api.getImage(imageId)
+            let base64ImageString = Buffer.from(image.data, "binary").toString("base64");
+            setAnswerImage("data:" + imageType + ";base64," + base64ImageString)
+        }
+    }
 
     const handleVote = (e, answerId, vote) => {
         e.preventDefault()
@@ -48,13 +61,6 @@ export const DisplayAnswers = ({ answer, questionId, handleUpdateAnswer, handleS
             navigate('/login')
         } else {
             dispatch(deleteAnswer({ questionId: questionId, answerId, userId: user.userId }, userToken, navigate))
-        }
-    }
-
-    const getImage = (imageId, imageType) => {
-        if (imageId !== null && imageType !== null) {
-            dispatch(getImageData(imageId))
-            setAnswerImage("data:" + imageType + ";base64," + image)
         }
     }
 

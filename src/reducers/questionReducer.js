@@ -2,6 +2,8 @@ const questionReducer = (state = { questions: [] }, action) => {
   switch (action.type) {
     case "GET_ALL_QUESTIONS":
       return { ...state, questions: action.payload };
+    case "GET_QUESTION":
+      return state;
     case "GET_FILTERED_QUESTIONS":
       return { ...state, questions: action.payload };
     case "POST_QUESTION":
