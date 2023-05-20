@@ -7,8 +7,8 @@ export const postAnswer =
       const image  = await api.postImage(answerData.image, userToken);
       answerData.image = image.data;
       const { data } = await api.postAnswer(answerData, userToken);
+      await dispatch(getAllQuestions());
       dispatch({ type: "POST_ANSWER", payload: data });
-      dispatch(getAllQuestions());
       navigate(`/questions/${answerData.questionId}`);
     } catch (error) {
       console.log(error);
@@ -20,9 +20,9 @@ export const updateAnswer =
     try {
       const image  = await api.postImage(answerData.image, userToken);
       answerData.image = image.data;
-      await api.updateAnswer(answerData, userToken);
+      api.updateAnswer(answerData, userToken);
+      await dispatch(getAllQuestions());
       dispatch({ type: "UPDATE_ANSWER", payload: null });
-      dispatch(getAllQuestions());
       navigate(`/questions/${answerData.questionId}`);
     } catch (error) {
       console.log(error);
@@ -33,8 +33,8 @@ export const updateAnswerVotes =
   (answerData, userToken, navigate) => async (dispatch) => {
     try {
       await api.updateAnswerVotes(answerData, userToken);
+      await dispatch(getAllQuestions());
       dispatch({ type: "UPDATE_ANSWER_VOTES", payload: null });
-      dispatch(getAllQuestions());
       navigate(`/questions/${answerData.questionId}`);
     } catch (error) {
       console.log(error);
@@ -45,8 +45,8 @@ export const deleteAnswer =
   (answerData, userToken, navigate) => async (dispatch) => {
     try {
       await api.deleteAnswer(answerData, userToken);
+      await dispatch(getAllQuestions());
       dispatch({ type: "DELETE_ANSWER", payload: null });
-      dispatch(getAllQuestions());
       navigate(`/questions/${answerData.questionId}`);
     } catch (error) {
       console.log(error);

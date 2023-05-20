@@ -79,7 +79,7 @@ export const DisplayAnswers = ({ answer, questionId, handleUpdateAnswer, handleS
                         <div>
                             <button type='button' onClick={handleShare} >Share</button>
                             {
-                                user !== null && user.userId === answer.user.userId &&
+                                user !== null && (user.userId === answer.user.userId || user.role === "MODERATOR") &&
                                 <>
                                     <button type='button' onClick={e => handleUpdateAnswer(answer)}>Edit</button>
                                     <button type='button' onClick={e => handleDeleteAnswer(e, answer.id)}>Delete</button>

@@ -84,11 +84,9 @@ export const QuestionDetails = () => {
                 if (answerToUpdate !== null) {
                     answerToUpdate.text = answerText
                     dispatch(updateAnswer({ answer: answerToUpdate, image: answerImage, questionId, userId: user.userId }, userToken, navigate))
-                    window.location.reload(false)
                 } else {
                     setAnswerToUpdate(null)
                     dispatch(postAnswer({ questionId, image: answerImage, userId: user.userId, answerText }, userToken, navigate))
-                    window.location.reload(false)
                 }
             }
         }
@@ -133,16 +131,14 @@ export const QuestionDetails = () => {
                                         {question.image && <img src={question.image.imageData} width='300' alt="" />}
                                         <div className='question-details-tags'>
                                             {
-                                                tags.map(tag =>
-                                                    <p key={tag.id}>{tag.text}</p>
-                                                )
+                                                tags.map(tag => <p key={tag.id}>{tag.text}</p>)
                                             }
                                         </div>
                                         <div className='question-actions-user'>
                                             <div>
                                                 <button type='button' onClick={handleShare} >Share</button>
                                                 {
-                                                    user !== null && user?.userId === question.user.userId &&
+                                                    user !== null && (user.userId === question.user.userId || user.role === "MODERATOR") &&
                                                     <>
                                                         <button type='button' onClick={e => handleUpdateQuestion(e, question.id)}>Edit</button>
                                                         <button type='button' onClick={e => handleDeleteQuestion(e, question.id)}>Delete</button>

@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
 
 import { setCurrentUser } from '../../actions/userActions'
-import { getAllQuestions, updateQuestion } from '../../actions/questionActions'
+import { getQuestion, updateQuestion } from '../../actions/questionActions'
 import './AskQuestion.css'
 
 export const EditQuestion = () => {
@@ -14,10 +14,9 @@ export const EditQuestion = () => {
     const navigate = useNavigate()
     const { id } = useParams()
 
-    const questions = useSelector(state => state.questionReducer.questions)
-    const wrapper = questions.filter(wrapper => wrapper.question.id.toString() === id)[0]
-    var question = wrapper?.question
-    var tags = wrapper?.tags
+    const [question, setQuestion] = useState(null)
+    const [tags, setTags] = useState([])
+
     var user = useSelector(state => state.userReducer.user)
     var token = localStorage.getItem("Token")
     var userToken = token ? `Bearer ${JSON.parse(token).token}` : null
@@ -25,43 +24,52 @@ export const EditQuestion = () => {
     const [questionTitle, setQuestionTitle] = useState('')
     const [questionBody, setQuestionBody] = useState('')
     const [questionTags, setQuestionTags] = useState([])
+    const [questionImage, setQuestionImage] = useState(null)
+    const [imagePreview, setImagePreview] = useState(null)
 
     useEffect(() => {
-        dispatch(getAllQuestions())
-        console.log(wrapper)
-        document.getElementById('ask-ques-title').value = question?.title
-        document.getElementById('ask-ques-body').value = question?.text
-        document.getElementById('ask-ques-tags').value = tags?.map(tag => tag.text)
-        if (question?.title !== null) {
-            setQuestionTitle(question.title) 
+        const fetchData = async () => {
+            dispatch(getQuestion(id))
+            const wrapper = JSON.parse(localStorage.getItem("Question"))
+            setQuestion(wrapper.question)
+            let oldTags = wrapper.tags.map(tag => tag.text)
+            setTags(oldTags)
         }
-        if (question?.text !== null) {
-            setQuestionBody(question.text) 
-        }
-        if (tags !== null) {
-            setQuestionTags(tags) 
-        }
+        fetchData()
     }, [])
     
     useEffect(() => {
         dispatch(setCurrentUser(token !== null ? JSON.stringify(jwtDecode(token)) : null))
     }, [dispatch])
 
+    const handleUploadImage = (file) => {
+        setImagePreview(URL.createObjectURL(file))
+        let imageData = new FormData();
+        imageData.append("image", file)
+        setQuestionImage(imageData)
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault()
         if (user !== null) {
-            question.title = questionTitle
-            question.text = questionBody
-            // TODO add image
-            tags = questionTags
+            let newQuestion = question
+            newQuestion.title = questionTitle
+            newQuestion.text = questionBody
+            if (newQuestion.image !== null) {
+                newQuestion.image.imageData = ""
+            }
+            if (questionTags.length === 0) {
+                setQuestionTags(tags)
+            }
             dispatch(updateQuestion(
                 {
-                    question,
-                    tags
+                    question: newQuestion,
+                    tags: questionTags,
+                    image:  questionImage ? questionImage : null,
+                    userId: user.userId
                 },
                 userToken,
-                navigate
-            ))
+                navigate))
         } else {
             navigate('/auth/login')
         }
@@ -94,7 +102,8 @@ export const EditQuestion = () => {
                             <p>Add up to 5 tags to describe what your question is about. Start typing to se suggestions.</p>
                             <input type='text' id='ask-ques-tags' placeholder='e.g. (excel iphone flutter)' onChange={(e) => setQuestionTags(e.target.value.split(' '))} />
                         </label>
-                        <input id='upload-image' name ='image' type='file' />
+                        <input id='upload-image' name ='image' type='file' onChange={e => handleUploadImage(e.target.files[0])} />
+                        {imagePreview && <img alt='preview' src={imagePreview} width='300' />}
                     </div>
                     <input className='review-btn' type='submit' value='Review your question' />
                 </form>

@@ -18,7 +18,9 @@ export const Navbar = () => {
     var user = useSelector(state => state.userReducer.user)
     var token = localStorage.getItem("Token")
 
-    const [searchValue, setSearchValue] = useState(null)
+    const [userFilter, setUserFilter] = useState(null)
+    const [textFilter, setTextFilter] = useState(null)
+    const [tagFilter, setTagFilter] = useState(null)
 
     useEffect(() => {
         // console.log(searchValue)
@@ -39,12 +41,12 @@ export const Navbar = () => {
         navigate('/')
     }
 
-    const handleFilterQuestions = (searchValue) => {
+    const handleFilterQuestions = () => {
         // TODO filter the questions
         const filters= {
-            userId: 1,
+            username: "user",
+            tags: ["test", "frontend"]
         }
-        setSearchValue(searchValue)
     }
 
     return (

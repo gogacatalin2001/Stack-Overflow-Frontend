@@ -80,7 +80,7 @@ export const AskQuestion = () => {
                         </label>
                         <div>
                             <input id='upload-image' name='image' type='file' accept='image/*' onChange={(e) => handleUploadImage(e.target.files[0])} />
-                            {imagePreview && <img alt='preview' src={imagePreview} />}
+                            {imagePreview && <img alt='preview' src={imagePreview} width='300' />}
                         </div>
                     </div>
                     <input className='review-btn' type='submit' value='Review your question' />
