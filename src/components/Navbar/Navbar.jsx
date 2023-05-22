@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -18,14 +18,6 @@ export const Navbar = () => {
     var user = useSelector(state => state.userReducer.user)
     var token = localStorage.getItem("Token")
 
-    const [userFilter, setUserFilter] = useState(null)
-    const [textFilter, setTextFilter] = useState(null)
-    const [tagFilter, setTagFilter] = useState(null)
-
-    useEffect(() => {
-        // console.log(searchValue)
-    }, [])
-
     useEffect(() => {
         if (token) {
             if (jwtDecode(token).exp * 1000 < new Date().getTime()) {
@@ -41,14 +33,6 @@ export const Navbar = () => {
         navigate('/')
     }
 
-    const handleFilterQuestions = () => {
-        // TODO filter the questions
-        const filters= {
-            username: "user",
-            tags: ["test", "frontend"]
-        }
-    }
-
     return (
         <nav className='main-nav'>
             <div className='navbar'>
@@ -59,7 +43,7 @@ export const Navbar = () => {
                 <Link to='/' className='nav-item nav-btn'>Products</Link>
                 <Link to='/' className='nav-item nav-btn'>For Teams</Link>
                 <form>
-                    <input type='text' placeholder='Search...' onSubmit={e => handleFilterQuestions(e.target.value)} />
+                    <input type='text' placeholder='Search...' />
                     <img className='search-icon' src={search} alt='search' width='18' />
                 </form>
                 {user === null ?

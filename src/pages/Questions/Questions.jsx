@@ -11,7 +11,6 @@ export const Questions = () => {
     <div className='home-container-1'>
       <LeftSidebar />
       <div className='home-container-2'>
-        {/* TODO add question filtering by: tags, title, author*/}
         <HomeMainbar />
         <RightSidebar />
       </div>

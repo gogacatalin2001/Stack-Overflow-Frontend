@@ -39,7 +39,7 @@ export const UserProfile = () => {
     message += "username: " + userProfile.username + "\n"
     message += "email: " + userProfile.email + "\n"
     console.log("Uncomment method to send an email")
-    // sendEmail(message)
+    sendEmail(message)
     dispatch(updateUser(userProfile, userToken))
   }
 

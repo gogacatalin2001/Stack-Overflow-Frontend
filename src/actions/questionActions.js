@@ -34,29 +34,45 @@ export const getQuestion = (questionId) => async (dispatch) => {
   }
 };
 
-export const getFilteredQuestions = (filters) => async (dispatch) => {
+export const getFilteredQuestions = (filter) => async (dispatch) => {
   try {
-    const { questions } = await api.getAllQuestions();
-    const titleMatch = questions.filter((question) =>
-      question.title.toLowerCase().includes(filters.text.toLowerCase())
-    );
-    const usernameMatch = questions.filter(
-      (question) => question.user.username === filters.username
-    );
-    const tagMatch = questions.filter((question) =>
-      question.tags.some((tag) =>
-        tag.toLowerCase().includes(filters.tag.toLowerCase())
-      )
-    );
-    console.log(questions);
-    console.log(titleMatch);
-    console.log(usernameMatch);
-    console.log(tagMatch);
-
-    // dispatch({
-    //   type: "GET_FILTERED_QUESTIONS",
-    //   payload: { titleMatch, usernameMatch, tagMatch },
-    // });
+    const data = await api.getAllQuestions();
+    const questions = data.data;
+    let filteredQuestions = questions;
+    switch (filter.type) {
+      case "username":
+        filteredQuestions = questions.filter(
+          (wrapper) => wrapper.question.user.username === filter.value
+        );
+        break;
+      case "title":
+        filteredQuestions = questions.filter((wrapper) =>
+          wrapper.question.title
+            .toLowerCase()
+            .includes(filter.value.toLowerCase())
+        );
+        break;
+      case "tag":
+        filteredQuestions = questions.filter((wrapper) =>
+          wrapper.tags.some((tag) =>
+            tag.text.toLowerCase().includes(filter.value.toLowerCase())
+          )
+        );
+        break;
+      case "own":
+        filteredQuestions = questions.filter(
+          (wrapper) => wrapper.question.user.username === filter.value
+        );
+        break;
+      default:
+        filteredQuestions = questions;
+        break;
+    }
+    console.log(filteredQuestions);
+    dispatch({
+      type: "GET_FILTERED_QUESTIONS",
+      payload: filteredQuestions
+    });
   } catch (error) {
     console.log(error);
   }
@@ -86,10 +102,10 @@ export const updateQuestion =
       } else if (questionData.question.image === null) {
         questionData.image = "-1";
       } else {
-        questionData.image = questionData.question.image.id
-        questionData.question.image = null
+        questionData.image = questionData.question.image.id;
+        questionData.question.image = null;
       }
-      console.log(questionData)
+      console.log(questionData);
       const data = await api.updateQuestion(questionData, userToken);
       await dispatch(getAllQuestions());
       dispatch({ type: "UPDATE_QUESTION", payload: data });
